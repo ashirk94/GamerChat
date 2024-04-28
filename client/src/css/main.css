@@ -1,0 +1,7 @@
+html {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+}
