@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server/server.js",
     "server": "nodemon server/server.js",
-    "client": "npm run dev --prefix client ",
+    "client": "npm run dev --prefix client && start http://localhost:3000",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "",
