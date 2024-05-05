@@ -1,0 +1,19 @@
+{
+  "name": "gamerchat",
+  "version": "1.0.0",
+  "description": "CS 314 Project",
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "npm run dev --prefix client ",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
