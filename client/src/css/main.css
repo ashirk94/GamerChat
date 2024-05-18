@@ -1,7 +1,24 @@
-html {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    min-height: 100%;
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background-color: white;
+	color: black;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		Helvetica, Arial, sans-serif;
+}
+
+.primary-color {
+	color: red;
+}
+
+.secondary-color {
+	color: rgb(255, 200, 0);
+}
+
+.gold-container {
+	background-color: white;
+	width: 90%;
+	height: 100%;
 }

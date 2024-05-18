@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
-import { connectDatabase } from "../config/database.js";
-
-// Call the function to connect to the database
-connectDatabase();
+import database from "../config/database.js";
 
 const { Schema } = mongoose;
 
@@ -24,20 +21,7 @@ const UserSchema = new Schema(
 	{ timestamps: true }
 );
 
-// Static method to create a new user
-UserSchema.statics.createUser = async function(email, hash, displayName, socketId) {
-    return this.create({
-        email,
-        hash,
-        displayName,
-        socketId,
-        hasUnreadMessage: false,
-        isOnline: true,
-        admin: false
-    });
-};
-
-// Access the model method from the mongoose connection
-const User = mongoose.model("User", UserSchema);
+// Creates user model
+const User = database.model("User", UserSchema);
 
 export default User;

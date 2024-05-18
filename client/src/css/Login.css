@@ -1,62 +1,66 @@
-
-
 .login-container {
-    width: 300px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    background-color: #494646fb;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  input[type="text"],
-  input[type="password"] {
-    width: 90%;
-    padding: 2%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    height: 50%;
-  }
-  
-  button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-  
-body {
-  background-image: url('../images/gamechatlogin.jpg');
-  background-size: 100% auto;
-  background-position: center;
-
+	min-width: 400px;
+	width: 100%;
+	margin: auto;
+	padding: 20px;
+	border: 5px solid rgb(255, 200, 0);
+	border-radius: 5px;
+	background-color: white;
+	min-height: 95%;
+	max-width: 900px;
 }
 
-.username-input{
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  color: #d532f1;
+.form-group {
+	margin-bottom: 15px;
 }
-  
+
+label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+	width: 90%;
+	padding: 2%;
+	border: 1px solid black;
+	border-radius: 4px;
+	height: 50%;
+	max-width: 400px;
+}
+
+button[type="submit"] {
+	width: 100%;
+	padding: 10px;
+	background-color: red;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-top: 10px;
+	max-width: 200px;
+}
+
+button[type="submit"]:hover {
+	background-color: #cc0000;
+}
+
+.login-page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	height: calc(100vh - 56px); /* 56px is the height of the navbar */
+	background-color: white;
+}
+
+.username-input {
+	font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+	color: red;
+}
+
 .logo {
-  width: 400px;
-  height: auto;
-  margin-bottom: -15% ;
-  margin-top: -5%;
-  margin-left: -15%
+	width: 400px;
+	height: auto;
+	margin-bottom: 20px;
 }
