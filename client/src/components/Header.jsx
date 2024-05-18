@@ -26,7 +26,7 @@ function Header() {
 						</Nav>
 						<Nav className="ms-auto">
 							<Nav.Link as={Link} to="/login">
-								<FaSignInAlt /> Sign In
+								<FaSignInAlt /> Log In
 							</Nav.Link>
 							<Nav.Link as={Link} to="/register">
 								<FaUserPlus /> Sign Up

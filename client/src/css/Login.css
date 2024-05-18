@@ -1,5 +1,5 @@
 .login-container {
-	border: 5px solid rgb(255, 200, 0);
+	border: 4px solid black;
 	border-radius: 5px;
 	background-color: white;
 }
@@ -8,9 +8,13 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	text-align: center;
+	text-align: left;
 	height: calc(100vh - 56px); /* 56px is the height of the navbar */
-	background-color: white;
+	background-image: linear-gradient(
+		to bottom right,
+		rgb(199, 0, 0),
+		rgb(255, 200, 0)
+	);
 }
 
 .red-btn {

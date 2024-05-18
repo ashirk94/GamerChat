@@ -19,7 +19,7 @@ function LoginPage() {
 	return (
 		<div className="login-page">
 			<FormContainer>
-				<h1 className="sign-up">Sign In</h1>
+				<h1 className="sign-up">Log In</h1>
 				<Form onSubmit={handleSubmit}>
 					<Form.Group className="my-2" controlId="email">
 						<Form.Label>Email Address</Form.Label>
@@ -39,14 +39,17 @@ function LoginPage() {
 								setPassword(e.target.value)
 							}></Form.Control>
 					</Form.Group>
-					<Button type="submit" className="mt-3">
+					<Button
+						type="submit"
+						variant="danger"
+						className="mt-3 w-100 red-btn">
 						Log In
 					</Button>
 					<Row className="py-3">
 						<Col>
 							New to GamerChat?{" "}
 							<Link to="/register" className="std-link">
-								Register
+								Sign up
 							</Link>
 						</Col>
 					</Row>

@@ -24,9 +24,9 @@ body {
 }
 
 .std-link {
-	color: blue;
+	color: red;
 }
 
 .std-link:visited {
-	color: blue;
+	color: red;
 }
