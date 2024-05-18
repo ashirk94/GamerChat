@@ -1,48 +1,79 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import FormContainer from "../components/FormContainer";
+import { Link } from "react-router-dom";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import "../css/login.css";
 
 function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+	// State variables to store email and password input values
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const [displayName, setDisplayName] = useState("");
 
-  const handleNameChange = (e) => setName(e.target.value);
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
+	// Event handler for handling form submission
+	const handleSubmit = async (event) => {
+		event.preventDefault(); // Prevent default form submission behavior
+		// Add logic here to handle form submission (e.g., sending login credentials to server)
+		console.log("Submitting login credentials...");
+	};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('/api/users', {
-        name,
-        email,
-        password
-      });
-      console.log('User registered:', response.data);
-    } catch (error) {
-      console.error('Error registering user:', error.response.data.message);
-    }
-  };
-
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input type="text" value={name} onChange={handleNameChange} required />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input type="email" value={email} onChange={handleEmailChange} required />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input type="password" value={password} onChange={handlePasswordChange} required />
-        </div>
-        <button type="submit">Register</button>
-      </form>
-    </div>
-  );
+	return (
+		<div className="login-page">
+			<FormContainer>
+				<h1 className="sign-up">Sign Up</h1>
+				<Form onSubmit={handleSubmit}>
+					<Form.Group className="my-2" controlId="displayName">
+						<Form.Label>Display Name</Form.Label>
+						<Form.Control
+							type="text"
+							value={displayName}
+							onChange={(e) =>
+								setDisplayName(e.target.value)
+							}></Form.Control>
+					</Form.Group>
+					<Form.Group className="my-2" controlId="email">
+						<Form.Label>Email Address</Form.Label>
+						<Form.Control
+							type="email"
+							value={email}
+							onChange={(e) =>
+								setEmail(e.target.value)
+							}></Form.Control>
+					</Form.Group>
+					<Form.Group className="my-2" controlId="password">
+						<Form.Label>Password</Form.Label>
+						<Form.Control
+							type="password"
+							value={password}
+							onChange={(e) =>
+								setPassword(e.target.value)
+							}></Form.Control>
+					</Form.Group>
+					<Form.Group className="my-2" controlId="password">
+						<Form.Label>Confirm Password</Form.Label>
+						<Form.Control
+							type="password"
+							value={confirmPassword}
+							onChange={(e) =>
+								setConfirmPassword(e.target.value)
+							}></Form.Control>
+					</Form.Group>
+					<Button type="submit" className="mt-3">
+						Register
+					</Button>
+					<Row className="py-3">
+						<Col>
+							Already have an account?{" "}
+							<Link to="/login" className="std-link">
+								Log In
+							</Link>
+						</Col>
+					</Row>
+				</Form>
+			</FormContainer>
+		</div>
+	);
 }
 
 export default RegisterPage;
