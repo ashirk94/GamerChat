@@ -17,6 +17,8 @@ import ChatPage from "./pages/ChatPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import "./css/main.css";
+import "./css/custom.css";
+import "./css/custom.scss";
 
 // Using React Router to route to our pages
 const router = createBrowserRouter(

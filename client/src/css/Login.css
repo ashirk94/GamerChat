@@ -17,15 +17,6 @@
 	);
 }
 
-.red-btn {
-	background-color: red;
-	color: white;
-}
-
-.red-btn:hover {
-	background-color: rgb(196, 0, 0);
-}
-
 .sign-up {
 	margin-bottom: 20px;
 }

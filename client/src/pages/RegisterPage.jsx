@@ -59,10 +59,7 @@ function RegisterPage() {
 								setConfirmPassword(e.target.value)
 							}></Form.Control>
 					</Form.Group>
-					<Button
-						type="submit"
-						variant="danger"
-						className="mt-3 w-100 red-btn">
+					<Button type="submit" className="mt-3 w-100">
 						Sign Up
 					</Button>
 					<Row className="py-3">

@@ -9,14 +9,6 @@ body {
 		Helvetica, Arial, sans-serif;
 }
 
-.primary-color {
-	color: red;
-}
-
-.secondary-color {
-	color: rgb(255, 200, 0);
-}
-
 .gold-container {
 	background-color: rgb(255, 200, 0);
 	width: 90%;
