@@ -1,10 +1,6 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
-import { join } from 'path';
 
-// Define route for ChatPage
-router.get('/test', (req, res) => {
-  res.sendFile(join(__dirnamed, '../chat.html'));
-});
+//router.get('/chat', auth, asyncHandler(getChat));
 
 export default router;

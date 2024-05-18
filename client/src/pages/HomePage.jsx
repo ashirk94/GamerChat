@@ -1,9 +1,14 @@
 import React from "react";
+import "../css/home.css";
 
 function HomePage() {
 	return (
-		<div>
-			<h1>Home Page</h1>
+		<div className="home">
+			<img
+				src="/src/images/gamerchat.png"
+				alt="GamerChat logo"
+				className="main-logo"
+			/>
 		</div>
 	);
 }
