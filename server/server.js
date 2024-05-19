@@ -4,17 +4,19 @@ import cors from "cors";
 import { createServer } from "node:http";
 import { Server as SocketIoServer } from "socket.io";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
-
-// Routes
+import connectDatabase from "./config/database.js";
 import userRoutes from "./routes/UserRoutes.js";
-import messageRoutes from "./routes/MessageRoutes.js";
-import chatRoutes from "./routes/ChatRoutes.js";
+
+connectDatabase();
 
 const app = express();
+app.use(express.json());
 app.use(cors());
+
 const server = createServer(app); // http server
+
+// socket io server
 const io = new SocketIoServer(server, {
-	// socket io server
 	cors: {
 		origin: "http://localhost:3000",
 		methods: ["GET", "POST"]
@@ -38,7 +40,6 @@ io.on("connection", (socket) => {
 
 // Routes
 app.use("/api/users", userRoutes);
-app.use("/api/messages", messageRoutes);
 
 // Error handling
 app.use(notFound);

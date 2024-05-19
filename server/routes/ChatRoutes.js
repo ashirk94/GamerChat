@@ -1,6 +1,5 @@
 import express from "express";
-const router = express.Router();
 
-//router.get('/chat', auth, asyncHandler(getChat));
+const router = express.Router();
 
 export default router;

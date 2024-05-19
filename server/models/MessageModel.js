@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import database from "../config/database.js";
 
 const { Schema } = mongoose;
 
@@ -15,6 +14,6 @@ const MessageSchema = new Schema(
 	{ timestamps: true }
 );
 
-const Message = database.model("Message", MessageSchema);
+const Message = mongoose.model("Message", MessageSchema);
 
 export default Message;

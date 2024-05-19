@@ -13,11 +13,4 @@ async function connectDatabase() {
 	}
 }
 
-// Calls the function to connect to the database
-// We only need to call this function once in the entire application
-await connectDatabase();
-
-const database = mongoose.connection;
-
-// Exports the connection to the database
-export default database;
+export default connectDatabase;

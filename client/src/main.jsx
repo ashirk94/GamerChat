@@ -7,9 +7,9 @@ import {
 	Route,
 	RouterProvider
 } from "react-router-dom";
-import store from "./store.js";
+import store from "./reduxStore.js";
 import { Provider } from "react-redux";
-import App from "./components/App.jsx";
+import App from "./App.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";

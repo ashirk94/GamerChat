@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormContainer from "../components/FormContainer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useLoginMutation } from "../slices/usersApiSlice";
+import { setCredentials } from "../slices/authSlice";
+import Loader from "../components/Loader";
 import "../css/login.css";
 
 function LoginPage() {
@@ -9,18 +14,39 @@ function LoginPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
+	const [login, { isLoading }] = useLoginMutation();
+
+	const { userInfo } = useSelector((state) => state.auth);
+
+	// Redirects to home page if user is already logged in
+	useEffect(() => {
+		if (userInfo) {
+			navigate("/");
+		}
+	}, [userInfo, navigate]);
+
 	// Event handler for handling form submission
-	const handleSubmit = async (event) => {
-		event.preventDefault(); // Prevent default form submission behavior
-		// Add logic here to handle form submission (e.g., sending login credentials to server)
-		console.log("Submitting login credentials...");
+	const submitHandler = async (event) => {
+		event.preventDefault();
+
+		try {
+			const res = await login({ email, password }).unwrap();
+			dispatch(setCredentials({ ...res }));
+			navigate("/"); // Redirects to home page on successful login
+		} catch (error) {
+			toast.error(error?.data?.message || error.error);
+			console.error("Failed to login: ", error);
+		}
 	};
 
 	return (
 		<div className="login-page">
 			<FormContainer>
 				<h1 className="sign-up">Log In</h1>
-				<Form onSubmit={handleSubmit}>
+				<Form onSubmit={submitHandler}>
 					<Form.Group className="my-2" controlId="email">
 						<Form.Label>Email Address</Form.Label>
 						<Form.Control
@@ -39,6 +65,8 @@ function LoginPage() {
 								setPassword(e.target.value)
 							}></Form.Control>
 					</Form.Group>
+
+					{isLoading && <Loader />}
 					<Button type="submit" className="mt-3 w-100">
 						Log In
 					</Button>
