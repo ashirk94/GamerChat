@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User from "../models/UserModel.js";
 
-// May remove this middleware
+// Need to modify this middleware based on the new tutorial video
 
 // Checks if the user is authorized
 const auth = asyncHandler(async (req, res, next) => {
