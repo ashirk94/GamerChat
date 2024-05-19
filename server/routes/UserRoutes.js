@@ -1,10 +1,19 @@
 import express from "express";
-import asyncHandler from "express-async-handler";
-import { registerUser, loginUser } from "../controllers/UserController.js";
-import { auth } from "../middleware/authMiddleware.js";
+import {
+	authUser,
+	registerUser,
+	loginUser,
+	logoutUser,
+	getUserProfile,
+	updateUserProfile
+} from "../controllers/UserController.js";
 
 const router = express.Router();
 
-router.post('/', asyncHandler(registerUser));
+router.post("/", registerUser);
+router.post("/auth", loginUser);
+router.post("/auth", logoutUser);
+router.get("/profile", getUserProfile);
+router.put("/profile", updateUserProfile);
 
 export default router;

@@ -1,8 +1,4 @@
 import mongoose from "mongoose";
-import { connectDatabase } from "../config/database.js";
-
-// Call the function to connect to the database
-connectDatabase();
 
 const { Schema } = mongoose;
 
@@ -24,20 +20,21 @@ const UserSchema = new Schema(
 	{ timestamps: true }
 );
 
-// Static method to create a new user
-UserSchema.statics.createUser = async function(email, hash, displayName, socketId) {
-    return this.create({
-        email,
-        hash,
-        displayName,
-        socketId,
-        hasUnreadMessage: false,
-        isOnline: true,
-        admin: false
-    });
+// Hashes the password before saving it to the database
+UserSchema.pre("save", async function (next) {
+	if (!this.isModified("password")) {
+		next();
+	}
+
+	const salt = await bcrypt.genSalt(10);
+	this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+	return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Access the model method from the mongoose connection
+// Creates user model
 const User = mongoose.model("User", UserSchema);
 
 export default User;

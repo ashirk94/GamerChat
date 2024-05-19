@@ -1,0 +1,18 @@
+.home {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-height: calc(100vh - 56px); /* 56px is the height of the navbar */
+	width: 100%;
+	overflow: hidden;
+	background-image: linear-gradient(
+		to bottom right,
+		rgb(199, 0, 0),
+		rgb(255, 200, 0)
+	);
+}
+
+.main-logo {
+	height: 1000px;
+	width: 1000px;
+}
