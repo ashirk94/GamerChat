@@ -1,27 +1,20 @@
 {
-  "name": "gamerchat",
-  "version": "1.0.0",
-  "description": "CS 314 Project",
-  "scripts": {
-    "start": "node server/server.js",
-    "server": "nodemon /server/server.js",
-    "client": "npm run dev --prefix client && start http://localhost:3000",
-    "dev": "concurrently \"npm run server\" \"npm run client\" ",
-    "start-chat-server": "node server/index.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "axios": "^1.6.8",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "mongoose": "^8.3.3",
-    "nodemon": "^3.1.0",
-    "react-router-dom": "^6.23.0",
-    "socket.io": "^4.7.5",
-    "socket.io-client": "^4.7.5"
-  }
+	"name": "gamerchat",
+	"version": "1.0.0",
+	"description": "CS 314 Project",
+	"scripts": {
+		"start": "node server/server.js",
+		"server": "nodemon /server/server.js",
+		"client": "npm run dev --prefix client && start http://localhost:3000",
+		"dev": "concurrently \"npm run server\" \"npm run client\" ",
+		"start-chat-server": "node server/index.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"concurrently": "^8.2.2"
+	},
+	"dependencies": {
+		"dotenv": "^16.4.5"
+	}
 }
