@@ -14,6 +14,7 @@ import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
+import GroupChatPage from "./pages/GroupChatPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import "./css/main.css";
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
 			<Route path="/login" element={<LoginPage />} />
 			<Route path="/register" element={<RegisterPage />} />
 			<Route path="/chat" element={<ChatPage />} />
+			<Route path="/groupchat" element={<GroupChatPage />} />
 			<Route path="/profile" element={<ProfilePage />} />
 		</Route>
 	)
