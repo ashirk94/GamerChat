@@ -1,37 +1,44 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const { Schema } = mongoose;
 
 // User model
 const UserSchema = new Schema(
-	{
-		email: String,
-		hash: String,
-		profilePic: {
-			data: Buffer,
-			contentType: String
-		},
-		displayName: String,
-		socketId: String,
-		hasUnreadMessage: Boolean,
-		isOnline: Boolean,
-		admin: Boolean
-	},
-	{ timestamps: true }
+    {
+        email: { type: String, required: true, unique: true },
+        password: { type: String, required: true },
+        displayName: { type: String, required: true },
+        profilePic: {
+            data: Buffer,
+            contentType: String
+        },
+        socketId: String,
+        hasUnreadMessage: Boolean,
+        isOnline: Boolean,
+        admin: Boolean
+    },
+    { timestamps: true }
 );
 
 // Hashes the password before saving it to the database
 UserSchema.pre("save", async function (next) {
-	if (!this.isModified("password")) {
-		next();
-	}
+    if (!this.isModified("password")) {
+        return next();
+    }
 
-	const salt = await bcrypt.genSalt(10);
-	this.password = await bcrypt.hash(this.password, salt);
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error) {
+        return next(error);
+    }
 });
 
 UserSchema.methods.matchPassword = async function (enteredPassword) {
-	return await bcrypt.compare(enteredPassword, this.password);
+    const isMatch = await bcrypt.compare(enteredPassword, this.password);
+    return isMatch;
 };
 
 // Creates user model

@@ -9,7 +9,8 @@ const MessageSchema = new Schema(
 		text: { type: String, required: true },
 		sender: String,
 		recipient: String,
-		seen: Boolean
+		seen: Boolean,
+		deletedBy: { type: [String], default: [] } // Array of users who have deleted the message
 	},
 	{ timestamps: true }
 );

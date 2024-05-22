@@ -5,8 +5,9 @@ import { createServer } from "node:http";
 import { Server as SocketIoServer } from "socket.io";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDatabase from "./config/database.js";
-import userRoutes from "./routes/UserRoutes.js";
-
+import userRoutes from "./routes/userRoutes.js";
+import messageRoutes from "./routes/MessageRoutes.js"; // Import message routes
+//SAVE COMMENT 3
 connectDatabase();
 
 const app = express();
@@ -23,23 +24,45 @@ const io = new SocketIoServer(server, {
 	}
 });
 
+// Store users and their socket IDs
+const users = {};
+
 io.on("connection", (socket) => {
 	console.log("a user connected");
 
-	socket.on("chat-message", (msg) => {
-		console.log("message: " + msg);
+	socket.on("register", (displayName) => {
+		users[displayName] = socket.id;
+		console.log(`User registered: ${displayName}`);
+	});
 
-		// Emit the received message to all sockets except the sender
-		socket.broadcast.emit("chat-message", msg);
+	socket.on("chat-message", (msg) => {
+		console.log("message: " + JSON.stringify(msg));
+
+		const recipientSocketId = users[msg.recipient];
+		if (recipientSocketId) {
+			io.to(recipientSocketId).emit("chat-message", msg);
+		}
+
+		// Emit the message back to the sender
+		socket.emit("chat-message", msg);
 	});
 
 	socket.on("disconnect", () => {
 		console.log("user disconnected");
+
+		// Remove the user from the users object
+		for (const displayName in users) {
+			if (users[displayName] === socket.id) {
+				delete users[displayName];
+				break;
+			}
+		}
 	});
 });
 
 // Routes
 app.use("/api/users", userRoutes);
+app.use("/api/messages", messageRoutes); // Use message routes
 
 // Error handling
 app.use(notFound);

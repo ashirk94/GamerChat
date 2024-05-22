@@ -41,6 +41,9 @@ function Header() {
 							<Nav.Link as={Link} to="/chat">
 								Chat
 							</Nav.Link>
+							<Nav.Link as={Link} to="/groupchat">
+								GroupChat
+							</Nav.Link>
 							<Nav.Link as={Link} to="/profile">
 								Profile
 							</Nav.Link>
