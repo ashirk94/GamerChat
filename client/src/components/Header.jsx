@@ -42,10 +42,7 @@ function Header() {
 								Chat
 							</Nav.Link>
 							<Nav.Link as={Link} to="/groupchat">
-								GroupChat
-							</Nav.Link>
-							<Nav.Link as={Link} to="/profile">
-								Profile
+								Group Chat
 							</Nav.Link>
 						</Nav>
 						<Nav className="ms-auto">

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import Loader from "../components/Loader";
-import "../css/Login.css";
+import "../css/login.css";
 
 function LoginPage() {
 	// State variables to store email and password input values
