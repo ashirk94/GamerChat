@@ -5,7 +5,8 @@ import {
 	loginUser,
 	logoutUser,
 	checkUserExists,
-	updateUserProfile
+	updateUserProfile,
+	getUserProfile
 } from "../controllers/UserController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -21,6 +22,7 @@ router.post("/", registerUser);
 router.post("/auth", loginUser);
 router.route("/:displayName").get(checkUserExists);
 router.post("/logout", logoutUser);
+router.route("/profile").get(protect, getUserProfile);
 router.route("/profile").put(protect, updateUserProfile);
 
 export default router;

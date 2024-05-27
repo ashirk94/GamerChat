@@ -1,10 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookies from "js-cookie";
 
 const baseQuery = fetchBaseQuery({
-	prepareHeaders: (headers, { getState }) => {
-		const token = getState().auth.token; // Correct the path to access the token
+	baseUrl: "/api",
+	prepareHeaders: (headers) => {
+		const token = Cookies.get("jwt"); // Retrieve the token from the cookie
 		if (token) {
-			headers.set("authorization", `Bearer ${token}`);
+			headers.set("Authorization", `Bearer ${token}`);
 		}
 		return headers;
 	}
