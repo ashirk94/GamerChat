@@ -1,5 +1,11 @@
 import express from "express";
-import { saveMessage, getMessages, clearMessages, markMessagesAsSeen, deleteMessages } from "../controllers/messageController.js";
+import {
+	saveMessage,
+	getMessages,
+	clearMessages,
+	markMessagesAsSeen,
+	deleteMessages
+} from "../controllers/MessageController.js";
 
 const router = express.Router();
 

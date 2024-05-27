@@ -1,67 +1,92 @@
 .profile-page {
-    width: 80%;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-    text-align: center;
+	width: 80%;
+	margin: 0 auto;
+	font-family: Arial, sans-serif;
+	text-align: center;
 }
 
 .profile-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 20px;
 }
 
 .profile-picture {
-    position: relative;
-    margin-bottom: 20px;
+	position: relative;
+	margin-bottom: 20px;
 }
 
-.profile-picture img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
+.profile-picture-img {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-bottom: 20px;
+}
+
+.no-profile-picture {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	border: 1px solid #ddd;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #aaa;
+	font-size: 14px;
+	margin: 20px auto;
 }
 
 .profile-picture input {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    opacity: 0;
-    width: 150px;
-    height: 150px;
-    cursor: pointer;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	opacity: 0;
+	width: 150px;
+	height: 150px;
+	cursor: pointer;
 }
 
 .basic-info p,
 .basic-info input,
 .basic-info textarea,
 .basic-info select {
-    margin: 5px 0;
-    display: block;
-    width: 100%;
-    max-width: 300px;
-    margin-left: auto;
-    margin-right: auto;
+	margin: 5px 0;
+	display: block;
+	width: 100%;
+	max-width: 300px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .basic-info input,
 .basic-info textarea,
 .basic-info select {
-    padding: 8px;
-    box-sizing: border-box;
+	padding: 8px;
+	box-sizing: border-box;
 }
 
 .friends-followers ul {
-    list-style-type: none;
-    padding: 0;
+	list-style-type: none;
+	padding: 0;
 }
 
 .friends-followers li {
-    margin: 5px 0;
+	margin: 5px 0;
 }
 
 .about-section {
-    margin-top: 20px;
+	margin-top: 20px;
+}
+
+/*card headers and borders */
+.gold-card-header {
+	background-color: rgb(255, 200, 0) !important;
+	color: black;
+	font-weight: bold;
+}
+
+.gold-card {
+	border: 4px solid rgb(255, 200, 0) !important;
 }

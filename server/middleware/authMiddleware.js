@@ -2,10 +2,7 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User from "../models/UserModel.js";
 
-// Need to modify this middleware based on the new tutorial video
-
-// Checks if the user is authorized
-const auth = asyncHandler(async (req, res, next) => {
+const protect = asyncHandler(async (req, res, next) => {
 	let token;
 
 	if (
@@ -13,20 +10,14 @@ const auth = asyncHandler(async (req, res, next) => {
 		req.headers.authorization.startsWith("Bearer")
 	) {
 		try {
-			// Gets the token from headers
 			token = req.headers.authorization.split(" ")[1];
-
-			// Verifies the token
 			const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-			// Gets the user from the token
 			req.user = await User.findById(decoded.id).select("-password");
-
 			next();
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			res.status(401);
-			throw new Error("Not authorized");
+			throw new Error("Not authorized, token failed");
 		}
 	}
 
@@ -36,4 +27,4 @@ const auth = asyncHandler(async (req, res, next) => {
 	}
 });
 
-export { auth };
+export { protect };
