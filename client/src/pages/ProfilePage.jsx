@@ -37,6 +37,7 @@ const ProfilePage = () => {
 
 	const [updateUserProfile, { isLoading, error }] = useUpdateUserMutation();
 
+	const [editMode, setEditMode] = useState(false);
 	const [fullName, setFullName] = useState("");
 	const [displayName, setDisplayName] = useState("");
 	const [email, setEmail] = useState("");
@@ -76,17 +77,10 @@ const ProfilePage = () => {
 				profilePic: profilePicUrl
 			};
 
-			const token = userInfo.token; // Ensure you have the token from userInfo
-
-			const config = {
-				headers: {
-					Authorization: `Bearer ${token}`
-				}
-			};
-
-			const res = await updateUserProfile(updatedUser, config).unwrap();
+			const res = await updateUserProfile(updatedUser).unwrap();
 			dispatch(setCredentials(res));
 			toast.success("Profile updated successfully");
+			setEditMode(false); // Exit edit mode after saving
 		} catch (err) {
 			toast.error(err?.data?.message || err.error);
 		}
@@ -147,102 +141,144 @@ const ProfilePage = () => {
 							</Form.Group>
 						</Col>
 						<Col md={8}>
-							<Form onSubmit={submitHandler}>
-								<Form.Group
-									controlId="fullName"
-									className="mb-3">
-									<Form.Label>Full Name</Form.Label>
-									<Form.Control
-										type="text"
-										placeholder="Enter full name"
-										value={fullName}
-										onChange={(e) =>
-											setFullName(e.target.value)
-										}
-									/>
-								</Form.Group>
-								<Form.Group
-									controlId="displayName"
-									className="mb-3">
-									<Form.Label>Display Name</Form.Label>
-									<Form.Control
-										type="text"
-										placeholder="Enter display name"
-										value={displayName}
-										onChange={(e) =>
-											setDisplayName(e.target.value)
-										}
-									/>
-								</Form.Group>
-								<Form.Group controlId="email" className="mb-3">
-									<Form.Label>Email Address</Form.Label>
-									<Form.Control
-										type="email"
-										placeholder="Enter email"
-										value={email}
-										onChange={(e) =>
-											setEmail(e.target.value)
-										}
-									/>
-								</Form.Group>
-								<Form.Group controlId="phone" className="mb-3">
-									<Form.Label>Phone Number</Form.Label>
-									<Form.Control
-										type="text"
-										placeholder="Enter phone number"
-										value={phone}
-										onChange={(e) =>
-											setPhone(e.target.value)
-										}
-									/>
-								</Form.Group>
-								<Form.Group controlId="bio" className="mb-3">
-									<Form.Label>Bio</Form.Label>
-									<Form.Control
-										as="textarea"
-										rows={3}
-										placeholder="Enter bio"
-										value={bio}
-										onChange={(e) => setBio(e.target.value)}
-									/>
-								</Form.Group>
-								<Form.Group
-									controlId="location"
-									className="mb-3">
-									<Form.Label>Location</Form.Label>
-									<Form.Control
-										type="text"
-										placeholder="Enter location"
-										value={location}
-										onChange={(e) =>
-											setLocation(e.target.value)
-										}
-									/>
-								</Form.Group>
-								<Form.Group
-									controlId="visibility"
-									className="mb-3">
-									<Form.Label>Visibility</Form.Label>
-									<Form.Control
-										as="select"
-										value={visibility}
-										onChange={(e) =>
-											setVisibility(e.target.value)
-										}>
-										<option value="public">Public</option>
-										<option value="private">Private</option>
-										<option value="friends">
-											Friends Only
-										</option>
-									</Form.Control>
-								</Form.Group>
-								<Button
-									type="submit"
-									variant="primary"
-									className="mt-3">
-									Save
-								</Button>
-							</Form>
+							{editMode ? (
+								<Form onSubmit={submitHandler}>
+									<Form.Group
+										controlId="fullName"
+										className="mb-3">
+										<Form.Label>Full Name</Form.Label>
+										<Form.Control
+											type="text"
+											placeholder="Enter full name"
+											value={fullName}
+											onChange={(e) =>
+												setFullName(e.target.value)
+											}
+										/>
+									</Form.Group>
+									<Form.Group
+										controlId="displayName"
+										className="mb-3">
+										<Form.Label>Display Name</Form.Label>
+										<Form.Control
+											type="text"
+											placeholder="Enter display name"
+											value={displayName}
+											onChange={(e) =>
+												setDisplayName(e.target.value)
+											}
+										/>
+									</Form.Group>
+									<Form.Group
+										controlId="email"
+										className="mb-3">
+										<Form.Label>Email Address</Form.Label>
+										<Form.Control
+											type="email"
+											placeholder="Enter email"
+											value={email}
+											onChange={(e) =>
+												setEmail(e.target.value)
+											}
+										/>
+									</Form.Group>
+									<Form.Group
+										controlId="phone"
+										className="mb-3">
+										<Form.Label>Phone Number</Form.Label>
+										<Form.Control
+											type="text"
+											placeholder="Enter phone number"
+											value={phone}
+											onChange={(e) =>
+												setPhone(e.target.value)
+											}
+										/>
+									</Form.Group>
+									<Form.Group
+										controlId="bio"
+										className="mb-3">
+										<Form.Label>Bio</Form.Label>
+										<Form.Control
+											as="textarea"
+											rows={3}
+											placeholder="Enter bio"
+											value={bio}
+											onChange={(e) =>
+												setBio(e.target.value)
+											}
+										/>
+									</Form.Group>
+									<Form.Group
+										controlId="location"
+										className="mb-3">
+										<Form.Label>Location</Form.Label>
+										<Form.Control
+											type="text"
+											placeholder="Enter location"
+											value={location}
+											onChange={(e) =>
+												setLocation(e.target.value)
+											}
+										/>
+									</Form.Group>
+									<Form.Group
+										controlId="visibility"
+										className="mb-3">
+										<Form.Label>Visibility</Form.Label>
+										<Form.Control
+											as="select"
+											value={visibility}
+											onChange={(e) =>
+												setVisibility(e.target.value)
+											}>
+											<option value="public">
+												Public
+											</option>
+											<option value="private">
+												Private
+											</option>
+											<option value="friends">
+												Friends Only
+											</option>
+										</Form.Control>
+									</Form.Group>
+									<Button
+										type="submit"
+										variant="primary"
+										className="mt-3">
+										Save
+									</Button>
+								</Form>
+							) : (
+								<>
+									<h4>{displayName}</h4>
+									<p>
+										<strong>Full Name:</strong> {fullName}
+									</p>
+									<p>
+										<strong>Email:</strong> {email}
+									</p>
+									<p>
+										<strong>Phone:</strong> {phone}
+									</p>
+									<p>
+										<strong>Bio:</strong> {bio}
+									</p>
+									<p>
+										<strong>Location:</strong> {location}
+									</p>
+									<p>
+										<strong>Visibility:</strong>{" "}
+										{visibility}
+									</p>
+									<Button
+										variant="secondary"
+										onClick={() => setEditMode(true)}>
+										Edit Profile
+									</Button>
+								</>
+							)}
 						</Col>
 					</Row>
 				</Card.Body>
