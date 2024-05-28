@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 // authentication functions for the frontend
 
@@ -16,7 +17,6 @@ const authSlice = createSlice({
 		setCredentials: (state, action) => {
 			state.userInfo = action.payload;
 			localStorage.setItem("userInfo", JSON.stringify(action.payload));
-			console.log(action.payload.token);
 			localStorage.setItem("token", action.payload.token);
 		},
 		logout: (state) => {

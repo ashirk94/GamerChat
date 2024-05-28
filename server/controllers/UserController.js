@@ -1,5 +1,4 @@
 import asyncHandler from "express-async-handler";
-import sharp from "sharp";
 import User from "../models/UserModel.js";
 import generateToken from "../utils/generateToken.js";
 
@@ -65,13 +64,7 @@ const loginUser = asyncHandler(async (req, res) => {
 		return res.status(201).json({
 			_id: user.id,
 			email: user.email,
-			displayName: user.displayName,
-			fullName: user.fullName,
-			phone: user.phone,
-			bio: user.bio,
-			location: user.location,
-			visibility: user.visibility,
-			profilePic: user.profilePic
+			displayName: user.displayName
 		});
 	} else {
 		console.log("Invalid password for email:", email);
@@ -86,82 +79,89 @@ const logoutUser = asyncHandler(async (req, res) => {
 		expires: new Date(0)
 	});
 
-	// delete all users for debugging
-	//await User.deleteMany({});
-
 	res.status(200).json({ message: "Logged out successfully" });
 });
 
 const updateUserProfile = asyncHandler(async (req, res) => {
-	const user = await User.findById(req.user._id);
+	try {
+		const user = await User.findById(req.user._id);
 
-	if (user) {
-		user.fullName = req.body.fullName || user.fullName;
-		user.displayName = req.body.displayName || user.displayName;
-		user.email = req.body.email || user.email;
-		user.phone = req.body.phone || user.phone;
-		user.bio = req.body.bio || user.bio;
-		user.location = req.body.location || user.location;
-		user.visibility = req.body.visibility || user.visibility;
-		user.profilePic = req.body.profilePic || user.profilePic;
+		if (user) {
+			user.displayName = req.body.displayName || user.displayName;
+			user.fullName = req.body.fullName || user.fullName;
+			user.location = req.body.location || user.location;
+			user.bio = req.body.bio || user.bio;
+			user.phone = req.body.phone || user.phone;
+			user.email = req.body.email || user.email;
+			user.visibility = req.body.visibility || user.visibility;
 
-		const updatedUser = await user.save();
+			if (req.file) {
+				user.profilePicture = {
+					data: req.file.buffer,
+					contentType: req.file.mimetype
+				};
+			}
 
-		res.json({
-			_id: updatedUser._id,
-			fullName: updatedUser.fullName,
-			displayName: updatedUser.displayName,
-			email: updatedUser.email,
-			phone: updatedUser.phone,
-			bio: updatedUser.bio,
-			location: updatedUser.location,
-			visibility: updatedUser.visibility,
-			profilePic: updatedUser.profilePic,
-			token: req.token
-		});
-	} else {
-		res.status(404);
-		throw new Error("User not found");
+			const updatedUser = await user.save();
+
+			res.json({
+				_id: updatedUser._id,
+				displayName: updatedUser.displayName,
+				fullName: updatedUser.fullName,
+				location: updatedUser.location,
+				bio: updatedUser.bio,
+				phone: updatedUser.phone,
+				email: updatedUser.email,
+				visibility: updatedUser.visibility,
+				profilePicture: updatedUser.profilePicture
+					? {
+							data: updatedUser.profilePicture.data.toString(
+								"base64"
+							),
+							contentType: updatedUser.profilePicture.contentType
+					  }
+					: null
+			});
+		} else {
+			res.status(404);
+			throw new Error("User not found");
+		}
+	} catch (error) {
+		console.error("Error updating user profile:", error);
+		res.status(500).send({ message: "Internal Server Error" });
 	}
 });
 
 const getUserProfile = asyncHandler(async (req, res) => {
 	const user = await User.findById(req.user._id);
-	console.log(user._id, user.displayName);
 
 	if (user) {
 		res.json({
 			_id: user._id,
-			fullName: user.fullName,
-			displayName: user.displayName,
+			name: user.name,
 			email: user.email,
-			phone: user.phone,
+			displayName: user.displayName,
+			visibility: user.visibility,
+			fullName: user.fullName,
 			bio: user.bio,
 			location: user.location,
-			visibility: user.visibility,
-			profilePic: user.profilePic
+			phone: user.phone,
+			profilePicture: user.profilePicture
+				? {
+						data: user.profilePicture.data.toString("base64"),
+						contentType: user.profilePicture.contentType
+				  }
+				: null
 		});
 	} else {
-		res.status(404);
-		throw new Error("User not found");
+		res.status(404).send("User not found, cannot get user data");
 	}
-});
-
-const checkUserExists = asyncHandler(async (req, res) => {
-	const { displayName } = req.params;
-	const user = await User.findOne({ displayName });
-	if (!user) {
-		res.status(404);
-		throw new Error("User not found");
-	}
-	res.status(200).json({ message: "User found" });
 });
 
 export {
 	registerUser,
 	loginUser,
 	logoutUser,
-	checkUserExists,
 	updateUserProfile,
 	getUserProfile
 };
