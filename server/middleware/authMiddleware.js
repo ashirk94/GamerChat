@@ -6,24 +6,27 @@ const protect = asyncHandler(async (req, res, next) => {
 	let token;
 
 	if (req.cookies && req.cookies.jwt) {
-		// Retrieves token from cookie
 		token = req.cookies.jwt;
 		try {
 			const decoded = jwt.verify(token, process.env.JWT_SECRET);
-			// Retrieves user from token
-			req.user = await User.findById(decoded.userId).select("-password");
+			const userId = decoded.id;
+
+			// Queries the user with the id from the token
+			req.user = await User.findById(userId).select("-password");
 
 			if (!req.user) {
+				console.error("User not found for ID:", userId);
 				res.status(404);
-				throw new Error("User not found");
+				throw new Error(`User not found for ID: ${userId}`);
 			}
 			next();
 		} catch (error) {
-			console.error(error);
+			console.error("Token verification failed:", error);
 			res.status(401);
 			throw new Error("Not authorized, token failed");
 		}
 	} else {
+		console.error("No token found");
 		res.status(401);
 		throw new Error("Not authorized, no token");
 	}

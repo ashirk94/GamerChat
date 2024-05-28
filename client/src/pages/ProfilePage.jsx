@@ -10,33 +10,24 @@ import {
 	Card
 } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useUpdateUserMutation } from "../slices/usersApiSlice";
+import {
+	useGetUserProfileQuery,
+	useUpdateUserMutation
+} from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import "../css/profilepage.css";
-import axios from "axios";
-
-const uploadImage = async (imageFile) => {
-	const formData = new FormData();
-	formData.append("image", imageFile);
-
-	const config = {
-		headers: {
-			"Content-Type": "multipart/form-data"
-		}
-	};
-
-	const { data } = await axios.post("/api/upload", formData, config);
-	return data;
-};
 
 const ProfilePage = () => {
 	const dispatch = useDispatch();
-	const { userInfo } = useSelector((state) => state.auth);
-
-	const [updateUserProfile, { isLoading, error }] = useUpdateUserMutation();
-
+	const {
+		data: userProfile,
+		isLoading: isProfileLoading,
+		error: profileError
+	} = useGetUserProfileQuery();
+	const [updateUserProfile, { isLoading: isUpdating, error: updateError }] =
+		useUpdateUserMutation();
 	const [editMode, setEditMode] = useState(false);
 	const [fullName, setFullName] = useState("");
 	const [displayName, setDisplayName] = useState("");
@@ -44,43 +35,58 @@ const ProfilePage = () => {
 	const [phone, setPhone] = useState("");
 	const [bio, setBio] = useState("");
 	const [location, setLocation] = useState("");
-	const [visibility, setVisibility] = useState("public");
+	const [visibility, setVisibility] = useState("");
 	const [profilePicture, setProfilePicture] = useState(null);
+	const [profilePicturePreview, setProfilePicturePreview] = useState(null);
 
 	useEffect(() => {
-		if (userInfo) {
-			setFullName(userInfo.fullName || "");
-			setDisplayName(userInfo.displayName || "");
-			setEmail(userInfo.email || "");
-			setPhone(userInfo.phone || "");
-			setBio(userInfo.bio || "");
-			setLocation(userInfo.location || "");
-			setVisibility(userInfo.visibility || "public");
-			setProfilePicture(userInfo.profilePic || null);
+		if (userProfile) {
+			setFullName(userProfile.fullName || "");
+			setDisplayName(userProfile.displayName || "");
+			setEmail(userProfile.email || "");
+			setPhone(userProfile.phone || "");
+			setBio(userProfile.bio || "");
+			setLocation(userProfile.location || "");
+			setVisibility(userProfile.visibility || "");
+			if (userProfile.profilePicture) {
+				setProfilePicturePreview(
+					`data:${userProfile.profilePicture.contentType};base64,${userProfile.profilePicture.data}`
+				);
+			}
 		}
-	}, [userInfo]);
+	}, [userProfile]);
 
 	const handleProfilePictureChange = (e) => {
-		setProfilePicture(e.target.files[0]);
+		const file = e.target.files[0];
+		if (file) {
+			setProfilePicture(file);
+
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setProfilePicturePreview(reader.result);
+			};
+			reader.readAsDataURL(file);
+		}
 	};
 
 	const handleProfileUpdate = async (userData) => {
 		try {
-			let profilePicUrl = userData.profilePic;
-
+			const formData = new FormData();
+			formData.append("displayName", userData.displayName);
+			formData.append("fullName", userData.fullName);
+			formData.append("location", userData.location);
+			formData.append("bio", userData.bio);
+			formData.append("phone", userData.phone);
+			formData.append("email", userData.email);
+			formData.append("visibility", userData.visibility);
 			if (profilePicture) {
-				profilePicUrl = await uploadImage(profilePicture);
+				formData.append("profilePicture", profilePicture);
 			}
 
-			const updatedUser = {
-				...userData,
-				profilePic: profilePicUrl
-			};
-
-			const res = await updateUserProfile(updatedUser).unwrap();
+			const res = await updateUserProfile(formData).unwrap();
 			dispatch(setCredentials(res));
 			toast.success("Profile updated successfully");
-			setEditMode(false); // Exit edit mode after saving
+			setEditMode(false);
 		} catch (err) {
 			toast.error(err?.data?.message || err.error);
 		}
@@ -90,7 +96,6 @@ const ProfilePage = () => {
 		e.preventDefault();
 
 		const userData = {
-			_id: userInfo._id,
 			displayName,
 			fullName,
 			location,
@@ -103,11 +108,11 @@ const ProfilePage = () => {
 		await handleProfileUpdate(userData);
 	};
 
-	if (isLoading) return <Loader />;
+	if (isProfileLoading || isUpdating) return <Loader />;
 
 	return (
 		<Container className="profile-page">
-			{error && (
+			{(profileError || updateError) && (
 				<Message variant="danger">Error loading profile data</Message>
 			)}
 			<Card className="mb-4 gold-card">
@@ -117,9 +122,9 @@ const ProfilePage = () => {
 				<Card.Body>
 					<Row className="profile-header mb-3">
 						<Col md={4} className="text-center">
-							{profilePicture ? (
+							{profilePicturePreview ? (
 								<Image
-									src={profilePicture}
+									src={profilePicturePreview}
 									alt="Profile"
 									roundedCircle
 									fluid
@@ -131,14 +136,16 @@ const ProfilePage = () => {
 									No profile picture
 								</div>
 							)}
-							<Form.Group
-								controlId="profilePicture"
-								className="mt-3">
-								<Form.Control
-									type="file"
-									onChange={handleProfilePictureChange}
-								/>
-							</Form.Group>
+							{editMode && (
+								<Form.Group
+									controlId="profilePicture"
+									className="mt-3">
+									<Form.Control
+										type="file"
+										onChange={handleProfilePictureChange}
+									/>
+								</Form.Group>
+							)}
 						</Col>
 						<Col md={8}>
 							{editMode ? (
@@ -232,13 +239,13 @@ const ProfilePage = () => {
 											onChange={(e) =>
 												setVisibility(e.target.value)
 											}>
-											<option value="public">
+											<option value="Public">
 												Public
 											</option>
-											<option value="private">
+											<option value="Private">
 												Private
 											</option>
-											<option value="friends">
+											<option value="Friends Only">
 												Friends Only
 											</option>
 										</Form.Control>

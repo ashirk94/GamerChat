@@ -9,7 +9,7 @@ const UserSchema = new Schema(
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
 		displayName: { type: String, required: true },
-		profilePic: {
+		profilePicture: {
 			data: Buffer,
 			contentType: String
 		},
@@ -23,7 +23,7 @@ const UserSchema = new Schema(
 		location: String,
 		visibility: {
 			type: String,
-			default: "public"
+			default: "Public"
 		}
 	},
 	{ timestamps: true }

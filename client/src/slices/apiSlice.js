@@ -3,10 +3,11 @@ import Cookies from "js-cookie";
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: "/api",
+	credentials: "include",
 	prepareHeaders: (headers) => {
-		const token = Cookies.get("jwt"); // Retrieve the token from the cookie
+		const token = Cookies.get("jwt"); // Retrieves the token from the cookie
 		if (token) {
-			headers.set("Authorization", `Bearer ${token}`);
+			headers.set("Authorization", `Bearer ${token}`); // Sets the token in the headers
 		}
 		return headers;
 	}
