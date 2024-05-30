@@ -1,36 +1,27 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/UserModel.js";
 import generateToken from "../utils/generateToken.js";
-
+//SAVE COMMENT
 // Registers a new user
 const registerUser = asyncHandler(async (req, res) => {
 	const { displayName, email, password } = req.body;
 
 	if (!displayName || !email || !password) {
-		console.log("Missing fields for registration");
 		res.status(400);
 		throw new Error("Please enter all fields to register");
 	}
 
-	// Check if the user exists
 	const userExists = await User.findOne({ email });
 
 	if (userExists) {
-		console.log("User already exists for email:", email);
 		res.status(400);
 		throw new Error("User already exists");
 	}
 
-	// Create the user without re-hashing the password
-	const user = new User({
-		displayName,
-		email,
-		password
-	});
+	const user = new User({ displayName, email, password });
 
 	await user.save();
 
-	// JWT authentication
 	if (user) {
 		generateToken(res, user._id);
 		res.status(201).json({
@@ -39,7 +30,6 @@ const registerUser = asyncHandler(async (req, res) => {
 			displayName: user.displayName
 		});
 	} else {
-		console.log("Invalid user data for registration");
 		res.status(400);
 		throw new Error("Invalid user data");
 	}
@@ -48,11 +38,9 @@ const registerUser = asyncHandler(async (req, res) => {
 // Login with email and password
 const loginUser = asyncHandler(async (req, res) => {
 	const { email, password } = req.body;
-
 	const user = await User.findOne({ email });
 
 	if (!user) {
-		console.log("User not found for email:", email);
 		res.status(401);
 		throw new Error("Invalid email or password");
 	}
@@ -67,7 +55,6 @@ const loginUser = asyncHandler(async (req, res) => {
 			displayName: user.displayName
 		});
 	} else {
-		console.log("Invalid password for email:", email);
 		res.status(401);
 		throw new Error("Invalid email or password");
 	}
@@ -78,7 +65,6 @@ const logoutUser = asyncHandler(async (req, res) => {
 		httpOnly: true,
 		expires: new Date(0)
 	});
-
 	res.status(200).json({ message: "Logged out successfully" });
 });
 
@@ -115,9 +101,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 				visibility: updatedUser.visibility,
 				profilePicture: updatedUser.profilePicture
 					? {
-							data: updatedUser.profilePicture.data.toString(
-								"base64"
-							),
+							data: updatedUser.profilePicture.data.toString("base64"),
 							contentType: updatedUser.profilePicture.contentType
 					  }
 					: null
@@ -127,7 +111,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 			throw new Error("User not found");
 		}
 	} catch (error) {
-		console.error("Error updating user profile:", error);
 		res.status(500).send({ message: "Internal Server Error" });
 	}
 });
@@ -158,10 +141,22 @@ const getUserProfile = asyncHandler(async (req, res) => {
 	}
 });
 
+const getUserByDisplayName = asyncHandler(async (req, res) => {
+	const user = await User.findOne({ displayName: req.params.displayName });
+
+	if (user) {
+		res.json(user);
+	} else {
+		res.status(404);
+		throw new Error("User not found");
+	}
+});
+
 export {
 	registerUser,
 	loginUser,
 	logoutUser,
 	updateUserProfile,
+	getUserByDisplayName,
 	getUserProfile
 };

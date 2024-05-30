@@ -17,6 +17,8 @@
 		"wait-on": "^7.2.0"
 	},
 	"dependencies": {
-		"dotenv": "^16.4.5"
+		"bootstrap": "^5.3.3",
+		"dotenv": "^16.4.5",
+		"react-bootstrap": "^2.10.2"
 	}
 }

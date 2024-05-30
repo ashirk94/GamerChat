@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Message from "../models/MessageModel.js";
-
+//SAVE COMMENT
 // Save a message
 const saveMessage = asyncHandler(async (req, res) => {
 	const { user, text, sender, recipient, seen } = req.body;
