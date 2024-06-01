@@ -3,6 +3,7 @@ import {
 	registerUser,
 	loginUser,
 	logoutUser,
+	getUserByDisplayName,
 	updateUserProfile,
 	getUserProfile
 } from "../controllers/UserController.js";
@@ -11,7 +12,6 @@ import { upload } from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
 
-// Be careful using parameters, the /:displayName blocked other routes
 router.post("/", registerUser);
 router.post("/auth", loginUser);
 router.post("/logout", logoutUser);
@@ -22,5 +22,6 @@ router.put(
 	upload.single("profilePicture"),
 	updateUserProfile
 );
+router.get("/user/:displayName", getUserByDisplayName);
 
 export default router;
