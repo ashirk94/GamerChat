@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-//SAVE COMMENT
+
 const { Schema } = mongoose;
 
 // Message model
@@ -12,8 +12,8 @@ const MessageSchema = new Schema(
 		seen: Boolean,
 		timestamp: {
 			type: Date,
-			default: Date.now,
-		  },
+			default: Date.now
+		},
 		deletedBy: { type: [String], default: [] } // Array of users who have deleted the message
 	},
 	{ timestamps: true }

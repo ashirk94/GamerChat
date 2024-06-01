@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/UserModel.js";
 import generateToken from "../utils/generateToken.js";
-//SAVE COMMENT
+
 // Registers a new user
 const registerUser = asyncHandler(async (req, res) => {
 	const { displayName, email, password } = req.body;
@@ -101,7 +101,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 				visibility: updatedUser.visibility,
 				profilePicture: updatedUser.profilePicture
 					? {
-							data: updatedUser.profilePicture.data.toString("base64"),
+							data: updatedUser.profilePicture.data.toString(
+								"base64"
+							),
 							contentType: updatedUser.profilePicture.contentType
 					  }
 					: null

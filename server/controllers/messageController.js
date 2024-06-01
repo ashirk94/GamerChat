@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Message from "../models/MessageModel.js";
-//SAVE COMMENT
+
 // Save a message
 const saveMessage = asyncHandler(async (req, res) => {
 	const { user, text, sender, recipient, seen } = req.body;
@@ -13,10 +13,7 @@ const saveMessage = asyncHandler(async (req, res) => {
 const getMessages = asyncHandler(async (req, res) => {
 	const { displayName } = req.params;
 	const messages = await Message.find({
-		$or: [
-			{ sender: displayName },
-			{ recipient: displayName }
-		],
+		$or: [{ sender: displayName }, { recipient: displayName }],
 		deletedBy: { $ne: displayName } // Exclude messages deleted by the user
 	}).sort({ createdAt: 1 }); // Sort by creation time
 	res.status(200).json(messages);
@@ -65,4 +62,10 @@ const deleteMessages = asyncHandler(async (req, res) => {
 	res.status(200).json({ message: "Chat history deleted for user." });
 });
 
-export { saveMessage, getMessages, clearMessages, markMessagesAsSeen, deleteMessages };
+export {
+	saveMessage,
+	getMessages,
+	clearMessages,
+	markMessagesAsSeen,
+	deleteMessages
+};
