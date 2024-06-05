@@ -2,3 +2,7 @@
 .btn-primary {
 	color: #ffffff !important;
 }
+
+.rounded-circle {
+    border-radius: 50%;
+}

@@ -1,0 +1,257 @@
+[33mcommit c32d9e0b547961fcfeabc5ef8b5e3d71da60f585[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjoebranch[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/joebranch[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 23cad1f 432fdf9
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Tue Jun 4 23:23:04 2024 -0700
+
+    Merge pull request #16 from ashirk94/alan-development
+    
+    Test suites
+
+[33mcommit 432fdf9d7d9828dd447c73f55732133dd12de063[m[33m ([m[1;31morigin/alan-development[m[33m)[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Tue Jun 4 23:22:39 2024 -0700
+
+    Test suites
+
+[33mcommit 23cad1fac1294d220def6f1ff4c95a800a0965b5[m
+Merge: b4daf62 f8dab95
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Fri May 31 18:49:56 2024 -0700
+
+    Merge pull request #15 from ashirk94/joebranch
+    
+    Joseph's chat updates
+
+[33mcommit f8dab9585cbbee4dc483434239568f0d62f99f76[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Fri May 31 18:49:16 2024 -0700
+
+    Removed bootstrap from backend
+
+[33mcommit dcf760a60231730685e43364ad25beb0cf90dad4[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Fri May 31 18:44:21 2024 -0700
+
+    Updated dependencies and removed extra comments
+
+[33mcommit a153e2000b759c1a4f176ac334719fd9edcff4e3[m
+Author: jgafron <jgafron@pdx.edu>
+Date:   Wed May 29 17:41:03 2024 -0700
+
+    Added chat cosmetics, timestamps, delete chat and clear chat features
+
+[33mcommit b4daf62ab5012ca8f2d275ed7e85861a2f4e4f9b[m
+Merge: 267b0b7 cf21f70
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Tue May 28 03:05:51 2024 -0700
+
+    Merge pull request #13 from ashirk94/alan-development
+    
+    Profile now updates successfully
+
+[33mcommit cf21f70791b3f4143fd3887cea4e424cfa2dde73[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Tue May 28 03:05:30 2024 -0700
+
+    Profile now updates successfully
+
+[33mcommit 267b0b7aa66326354ed450ca66d638a41e14f84b[m
+Merge: 2d18b50 2da0cdf
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Mon May 27 15:05:54 2024 -0700
+
+    Merge pull request #12 from ashirk94/alan-development
+    
+    Profile page data populates from backend
+
+[33mcommit 2da0cdf3e355b333ef34e7e01b57a657c2896d2b[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Mon May 27 15:05:36 2024 -0700
+
+    Profile page data populates from backend
+
+[33mcommit 2d18b50b1f8730b73d593dcbc02b463bdd4d533d[m
+Merge: 952bf8e 0c1c8ba
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Mon May 27 01:29:46 2024 -0700
+
+    Merge pull request #11 from ashirk94/alan-development
+    
+    Profile Page
+
+[33mcommit 0c1c8ba7d8cbb464c44ae09e90105ec4265c8595[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Mon May 27 01:29:14 2024 -0700
+
+    Profile Page
+
+[33mcommit 952bf8e55d77a18887cea1d92b6c89239affe3b8[m
+Merge: aef1c3a f4a658f
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Wed May 22 13:39:47 2024 -0700
+
+    Merge pull request #10 from ashirk94/joebranch
+    
+    Added chat page, chat history, clear chat and delete chat features
+
+[33mcommit f4a658f7ea619e0c5245a7c57df4ea8047069c38[m
+Author: jgafron <jgafron@pdx.edu>
+Date:   Wed May 22 00:56:38 2024 -0700
+
+    Added chat page, chat history, clear chat and delete chat features
+
+[33mcommit aef1c3aeec41a17f600c11a860d933b181b76051[m
+Merge: bc51175 4efefb1
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Sun May 19 12:54:44 2024 -0700
+
+    Merge pull request #9 from ashirk94/alan-newest
+    
+    Logout implemented
+
+[33mcommit 4efefb1338d4d0aa3602b38548689453e749d748[m[33m ([m[1;31morigin/alan-newest[m[33m)[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sun May 19 12:52:03 2024 -0700
+
+    Logout implemented
+
+[33mcommit bc511753ea4b4b7996974c6b51ee73543cb5b2a9[m
+Merge: 6926561 7f46feb
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Sun May 19 01:25:41 2024 -0700
+
+    Merge pull request #8 from ashirk94/alan-newest
+    
+    Removed excess dependencies
+
+[33mcommit 7f46feb84b982b7cd4c25bdb26a44a965dad0e0a[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sun May 19 01:25:24 2024 -0700
+
+    Removed excess dependencies
+
+[33mcommit 69265615f49ba0e6a2df20963bf548e20d1ca19f[m
+Merge: dbe93b9 b20d610
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Sun May 19 01:11:34 2024 -0700
+
+    Merge pull request #7 from ashirk94/alan-newest
+    
+    Authentication
+
+[33mcommit b20d610c011909036a073e76968b095c04ade498[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sun May 19 01:09:18 2024 -0700
+
+    User registration successful
+
+[33mcommit e00b172dafa12236ee9df94cedffaf79679f6e41[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sat May 18 16:57:59 2024 -0700
+
+    Created custom red bootstrap components
+
+[33mcommit 67ff75ba78e752436b6ffdfe298cdf91456cfce4[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sat May 18 16:14:54 2024 -0700
+
+    Another UI update, handling auth in frontend
+
+[33mcommit 3374be4a3455e33ff644a06dbe12aa75ac747cb8[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sat May 18 14:54:33 2024 -0700
+
+    Login and Register UI
+
+[33mcommit 232e917bf85b68dff0983631247c155a91aae755[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Fri May 17 23:22:28 2024 -0700
+
+    Set up home page with logo
+
+[33mcommit e708c4c0c5bd5a3531fa4a987e636f1f88783020[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Fri May 17 21:03:24 2024 -0700
+
+    Fixed backend bugs and created new frontend UI
+
+[33mcommit dbe93b9fa80596776369c9c723a80c9ba3ea0a90[m
+Merge: 2fcbddf 3720c64
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Fri May 17 12:44:16 2024 -0700
+
+    Merge pull request #6 from ashirk94/joebranch
+    
+    Added registration react page, react router for chat/registration, ba…
+
+[33mcommit 3720c64a3a997003404e33424eaf62c6145f50e7[m
+Author: jgafron <jgafron@pdx.edu>
+Date:   Thu May 16 20:09:56 2024 -0700
+
+    Added registration react page, react router for chat/registration, backend mongodb connect and socket.io connection
+
+[33mcommit 2fcbddf9f79e17526952589b738c8a109c5349ae[m
+Merge: c0e8bca a874794
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Sun May 5 13:07:31 2024 -0700
+
+    Merge pull request #5 from ashirk94/alan-development
+    
+    Removed scripts from server code
+
+[33mcommit a874794926f7b583f8aa1937fdc6ad82e2f6dbb0[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sun May 5 13:07:15 2024 -0700
+
+    Removed scripts from server code
+    
+    Now the server should be run in the root directory
+
+[33mcommit c0e8bca4ad9148cfc17872671fb6a24df2f8fc49[m
+Merge: 2575405 106f357
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Sun May 5 13:05:29 2024 -0700
+
+    Merge pull request #4 from ashirk94/alan-development
+    
+    Modified commands
+
+[33mcommit 106f3571426478e1fa24e8955b7119a6d858dfa5[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sun May 5 13:05:14 2024 -0700
+
+    Modified commands
+    
+    Now displays frontend in the browser when running npm run dev in the root directory and the client directory
+
+[33mcommit 2575405d2b0ee2e8c2c75da490714aa9862bb53e[m
+Merge: d0ec772 5480b9b
+Author: Alan Shirk <67303514+ashirk94@users.noreply.github.com>
+Date:   Sun May 5 12:51:44 2024 -0700
+
+    Merge pull request #3 from ashirk94/alan-development
+    
+    Database and authentication
+
+[33mcommit 5480b9bfc459d21b34dc32a714d4516b8c0d76c1[m
+Author: Alan Shirk <ashirk94@gmail.com>
+Date:   Sat May 4 23:53:52 2024 -0700
+
+    Database and authentication
+
+[33mcommit d0ec77227a03c5b69b646bd764a7b206b550ca35[m
+Merge: 9c67823 49b15b0
+Author: jgafron <165853380+jgafron@users.noreply.github.com>
+Date:   Thu May 2 21:28:49 2024 -0700
+
+    Merge pull request #2 from ashirk94/joebranch
+    
+    Added images in components, login.jsx and login.css
+
+[33mcommit 49b15b00c1c9d98d13635ac1f741b1b5988cad49[m
+Author: joey gafron <jgafron@pdx.edu>
+Date:   Thu May 2 21:22:05 2024 -0700
+
+    Added images in components, login.jsx and login.css
+
+[33mcommit 9c67823c8fdade8851a6c3a90fd3380b8875e243[m[33m ([m[1;32mmain[m[33m)[m
