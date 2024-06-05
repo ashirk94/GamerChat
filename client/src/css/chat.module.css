@@ -1,4 +1,3 @@
-/* Global styles for body to ensure proper scrolling */
 body {
     margin: 0;
     padding: 0;
@@ -244,3 +243,30 @@ body {
     flex-direction: column;
 }
 
+.profilePicture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.recipientInfo {
+    display: flex;
+    align-items: center;
+    margin: 10px 0px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  .recipientProfilePicture {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-left: 3%;
+    margin-right: 10px;
+    border: 2px solid rgb(240, 130, 4); /* Added border */
+}
+  
+  .recipientName {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  

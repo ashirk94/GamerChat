@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Container, Nav, Navbar, NavDropdown, Badge } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { FaSignInAlt, FaUserPlus } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -9,10 +9,8 @@ import { logout } from "../slices/authSlice";
 
 function Header() {
 	const { userInfo } = useSelector((state) => state.auth);
-
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
 	const [logoutApiCall] = useLogoutMutation();
 
 	const logoutHandler = async () => {
@@ -49,7 +47,23 @@ function Header() {
 							{userInfo ? (
 								<>
 									<NavDropdown
-										title={userInfo.displayName}
+										title={
+											<>
+												{userInfo.profilePicture && (
+													<img
+														src={`data:${userInfo.profilePicture.contentType};base64,${userInfo.profilePicture.data}`}
+														alt="Profile"
+														className="rounded-circle"
+														style={{
+															width: "30px",
+															height: "30px",
+															marginRight: "10px"
+														}}
+													/>
+												)}
+												{userInfo.displayName}
+											</>
+										}
 										id="displayname">
 										<NavDropdown.Item
 											as={Link}
