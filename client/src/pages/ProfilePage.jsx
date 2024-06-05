@@ -38,6 +38,7 @@ const ProfilePage = () => {
 	const [visibility, setVisibility] = useState("");
 	const [profilePicture, setProfilePicture] = useState(null);
 	const [profilePicturePreview, setProfilePicturePreview] = useState(null);
+	const [successMessage, setSuccessMessage] = useState("");
 
 	useEffect(() => {
 		if (userProfile) {
@@ -85,7 +86,8 @@ const ProfilePage = () => {
 
 			const res = await updateUserProfile(formData).unwrap();
 			dispatch(setCredentials(res));
-			toast.success("Profile updated successfully");
+			//toast.success("Profile updated successfully");
+			setSuccessMessage("Profile updated successfully");
 			setEditMode(false);
 		} catch (err) {
 			toast.error(err?.data?.message || err.error);
@@ -114,6 +116,9 @@ const ProfilePage = () => {
 		<Container className="profile-page">
 			{(profileError || updateError) && (
 				<Message variant="danger">Error loading profile data</Message>
+			)}
+			{successMessage && (
+				<Message variant="success">{successMessage}</Message>
 			)}
 			<Card className="mb-4 gold-card">
 				<Card.Header className="gold-card-header">
