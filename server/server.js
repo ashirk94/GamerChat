@@ -28,7 +28,7 @@ app.use(
 );
 app.use(cookieParser());
 
-if (process.env.NODE.ENV === "production") {
+if (process.env.NODE_ENV === "production") {
 	const __dirname = path.resolve();
 	app.use(express.static(path.join(__dirname, "client", "client/dist")));
 
