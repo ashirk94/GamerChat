@@ -29,11 +29,14 @@ app.use(
 app.use(cookieParser());
 
 if (process.env.NODE.ENV === "production") {
-	app.use(express.static(path.join(__dirname, "client", "build")));
+	const __dirname = path.resolve();
+	app.use(express.static(path.join(__dirname, "client", "client/dist")));
 
 	app.get("*", (req, res) => {
-		res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+		res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 	});
+} else {
+	app.get("/", (req, res) => res.send("Server is ready"));
 }
 
 const server = createServer(app); // http server
