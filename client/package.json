@@ -24,7 +24,8 @@
 		"react-toastify": "^10.0.5",
 		"sass": "^1.77.2",
 		"socket.io": "^4.7.5",
-		"socket.io-client": "^4.7.5"
+		"socket.io-client": "^4.7.5",
+		"vite": "^5.2.0"
 	},
 	"devDependencies": {
 		"@babel/preset-env": "^7.24.6",
@@ -46,7 +47,6 @@
 		"jest-fetch-mock": "^3.0.3",
 		"msw": "^2.3.1",
 		"setimmediate": "^1.0.5",
-		"vite": "^5.2.0",
 		"whatwg-fetch": "^3.6.20"
 	}
 }
