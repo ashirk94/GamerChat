@@ -37,33 +37,33 @@ const registerUser = asyncHandler(async (req, res) => {
 
 // Login with email and password
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+	const { email, password } = req.body;
+	const user = await User.findOne({ email });
 
-    if (!user) {
-        res.status(401);
-        throw new Error("Invalid email or password");
-    }
+	if (!user) {
+		res.status(401);
+		throw new Error("Invalid email or password");
+	}
 
-    const isMatch = await user.matchPassword(password);
+	const isMatch = await user.matchPassword(password);
 
-    if (isMatch) {
-        generateToken(res, user._id);
-        return res.status(201).json({
-            _id: user.id,
-            email: user.email,
-            displayName: user.displayName,
-            profilePicture: user.profilePicture
-                ? {
-                      data: user.profilePicture.data.toString("base64"),
-                      contentType: user.profilePicture.contentType
-                  }
-                : null
-        });
-    } else {
-        res.status(401);
-        throw new Error("Invalid email or password");
-    }
+	if (isMatch) {
+		generateToken(res, user._id);
+		return res.status(201).json({
+			_id: user.id,
+			email: user.email,
+			displayName: user.displayName,
+			profilePicture: user.profilePicture
+				? {
+						data: user.profilePicture.data.toString("base64"),
+						contentType: user.profilePicture.contentType
+				  }
+				: null
+		});
+	} else {
+		res.status(401);
+		throw new Error("Invalid email or password");
+	}
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -75,76 +75,81 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const updateUserProfile = asyncHandler(async (req, res) => {
-    try {
-        const user = await User.findById(req.user._id);
+	try {
+		const user = await User.findById(req.user._id);
 
-        if (user) {
-            user.displayName = req.body.displayName || user.displayName;
-            user.fullName = req.body.fullName || user.fullName;
-            user.location = req.body.location || user.location;
-            user.bio = req.body.bio || user.bio;
-            user.phone = req.body.phone || user.phone;
-            user.email = req.body.email || user.email;
-            user.visibility = req.body.visibility || user.visibility;
+		if (user) {
+			user.displayName = req.body.displayName || user.displayName;
+			user.fullName = req.body.fullName || user.fullName;
+			user.location = req.body.location || user.location;
+			user.bio = req.body.bio || user.bio;
+			user.phone = req.body.phone || user.phone;
+			user.email = req.body.email || user.email;
+			user.visibility = req.body.visibility || user.visibility;
 
-            if (req.file) {
-                user.profilePicture = {
-                    data: req.file.buffer,
-                    contentType: req.file.mimetype
-                };
-            }
+			if (req.file) {
+				user.profilePicture = {
+					data: req.file.buffer,
+					contentType: req.file.mimetype
+				};
+			}
 
-            const updatedUser = await user.save();
+			const updatedUser = await user.save();
 
-            res.json({
-                _id: updatedUser._id,
-                displayName: updatedUser.displayName,
-                fullName: updatedUser.fullName,
-                location: updatedUser.location,
-                bio: updatedUser.bio,
-                phone: updatedUser.phone,
-                email: updatedUser.email,
-                visibility: updatedUser.visibility,
-                profilePicture: updatedUser.profilePicture
-                    ? {
-                          data: updatedUser.profilePicture.data.toString("base64"),
-                          contentType: updatedUser.profilePicture.contentType
-                      }
-                    : null
-            });
-        } else {
-            res.status(404);
-            throw new Error("User not found");
-        }
-    } catch (error) {
-        res.status(500).send({ message: "Internal Server Error" });
-    }
+			res.json({
+				_id: updatedUser._id,
+				displayName: updatedUser.displayName,
+				fullName: updatedUser.fullName,
+				location: updatedUser.location,
+				bio: updatedUser.bio,
+				phone: updatedUser.phone,
+				email: updatedUser.email,
+				visibility: updatedUser.visibility,
+				profilePicture: updatedUser.profilePicture
+					? {
+							data: updatedUser.profilePicture.data.toString(
+								"base64"
+							),
+							contentType: updatedUser.profilePicture.contentType
+					  }
+					: null
+			});
+		} else {
+			res.status(404);
+			throw new Error("User not found");
+		}
+	} catch (error) {
+		res.status(500).send({ message: "Internal Server Error" });
+	}
 });
 
-
-const getUserProfile = asyncHandler(async (req, res) => {
-	const user = await User.findById(req.user._id);
-
-	if (user) {
-		res.json({
-			_id: user._id,
-			name: user.name,
-			email: user.email,
-			displayName: user.displayName,
-			visibility: user.visibility,
-			fullName: user.fullName,
-			bio: user.bio,
-			location: user.location,
-			phone: user.phone,
-			profilePicture: user.profilePicture
-				? {
-						data: user.profilePicture.data.toString("base64"),
-						contentType: user.profilePicture.contentType
-				  }
-				: null
-		});
-	} else {
-		res.status(404).send("User not found, cannot get user data");
+const getUserProfile = asyncHandler(async (req, res, next) => {
+	try {
+		const user = await User.findById(req.user._id);
+		if (user) {
+			res.json({
+				_id: user._id,
+				name: user.name,
+				email: user.email,
+				displayName: user.displayName,
+				visibility: user.visibility,
+				fullName: user.fullName,
+				bio: user.bio,
+				location: user.location,
+				phone: user.phone,
+				profilePicture: user.profilePicture
+					? {
+							data: user.profilePicture.data.toString("base64"),
+							contentType: user.profilePicture.contentType
+					  }
+					: null
+			});
+		} else {
+			res.status(404).send("User not found, cannot get user data");
+		}
+	} catch (error) {
+		console.error("Error fetching user profile:", error);
+		next(error); // Passes the error to the error handling middleware
 	}
 });
 
