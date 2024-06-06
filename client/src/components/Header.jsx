@@ -5,7 +5,7 @@ import { FaSignInAlt, FaUserPlus } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/usersApiSlice";
-import { logout } from "../slices/authSlice";
+import { logout, clearProfile } from "../slices/authSlice";
 
 function Header() {
 	const { userInfo } = useSelector((state) => state.auth);
@@ -15,11 +15,12 @@ function Header() {
 
 	const logoutHandler = async () => {
 		try {
+			dispatch(clearProfile()); // Clear profile data immediately
 			await logoutApiCall().unwrap();
 			dispatch(logout());
 			navigate("/");
 		} catch (error) {
-			console.error("Failed to logout: ", error);
+			// Handle error appropriately if needed
 		}
 	};
 
@@ -38,9 +39,6 @@ function Header() {
 							</Nav.Link>
 							<Nav.Link as={Link} to="/chat">
 								Chat
-							</Nav.Link>
-							<Nav.Link as={Link} to="/groupchat">
-								Group Chat
 							</Nav.Link>
 						</Nav>
 						<Nav className="ms-auto">
