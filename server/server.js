@@ -19,7 +19,10 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 app.use(express.json());
 app.use(
 	cors({
-		origin: "http://localhost:3000", // allowed origin
+		origin: [
+			"http://localhost:3000",
+			"https://gamer-chat-161acd6cf748.herokuapp.com/"
+		],
 		credentials: true
 	})
 );
