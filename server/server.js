@@ -31,10 +31,17 @@ app.use(cookieParser());
 
 if (process.env.NODE_ENV === "production") {
 	const __dirname = path.resolve();
-	app.use(express.static(path.join(__dirname, "client", "client/dist")));
+	// Serves static files from the "client/dist" directory
+	app.use(express.static(path.join(__dirname, "client", "dist")));
 
+	// Handles React routing, return all requests to React app
 	app.get("*", (req, res) => {
-		res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+		if (req.originalUrl.startsWith("/api")) {
+			// Lets API requests be handled by other routes
+			next();
+		} else {
+			res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+		}
 	});
 } else {
 	app.get("/", (req, res) => res.send("Server is ready"));
@@ -45,7 +52,10 @@ const server = createServer(app); // http server
 // socket io server
 const io = new SocketIoServer(server, {
 	cors: {
-		origin: "http://localhost:3000",
+		origin: [
+			"http://localhost:3000",
+			"https://gamer-chat-161acd6cf748.herokuapp.com/"
+		],
 		methods: ["GET", "POST"]
 	}
 });
