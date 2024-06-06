@@ -1,272 +1,278 @@
 body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Arial, sans-serif;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 /* Ensure the top bar is fixed */
 .top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50px;
-    background: #333;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    z-index: 1000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 50px;
+	background: #333;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 20px;
+	z-index: 1000;
 }
 
 /* Add padding-top to create space for the fixed top bar */
 .main-content {
-    padding-top: 50px;
-    flex-grow: 1;
-    overflow-y: auto;
+	padding-top: 50px;
+	flex-grow: 1;
+	overflow-y: auto;
 }
 
 /* Update the messages list */
 #messages {
-    overflow: auto;
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    overflow-y: auto;
-    flex-grow: 1;
-    padding-bottom: 60px; /* Adjust this to create space for the input bar */
+	overflow: auto;
+	list-style-type: none;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	overflow-y: auto;
+	flex-grow: 1;
+	padding-bottom: 60px; /* Adjust this to create space for the input bar */
 }
 
 #messages > li {
-    padding: 0.5rem 1rem;
-    background: none;
+	padding: 0.5rem 1rem;
+	background: none;
 }
 
 /* Update the form container */
 #form-container {
-    background: rgba(0, 0, 0, 0.15);
-    padding: 0.25rem;
-    display: flex;
-    align-items: center;
-    height: 3rem;
-    box-sizing: border-box;
-    backdrop-filter: blur(10px);
+	background: rgba(0, 0, 0, 0.15);
+	padding: 0.25rem;
+	display: flex;
+	align-items: center;
+	height: 3rem;
+	box-sizing: border-box;
+	backdrop-filter: blur(10px);
 }
 
 /* Ensure the input and button styles are correct */
 #input {
-    border: none;
-    padding: 0 1rem;
-    flex-grow: 1;
-    border-radius: 2rem;
-    margin: 0.25rem;
+	border: none;
+	padding: 0 1rem;
+	flex-grow: 1;
+	border-radius: 2rem;
+	margin: 0.25rem;
 }
 
 #input:focus {
-    outline: none;
+	outline: none;
 }
 
 #form > button {
-    background: #333;
-    border: none;
-    padding: 0 1rem;
-    margin: 0.25rem;
-    border-radius: 3px;
-    outline: none;
-    color: #fff;
+	background: #333;
+	border: none;
+	padding: 0 1rem;
+	margin: 0.25rem;
+	border-radius: 3px;
+	outline: none;
+	color: #fff;
 }
 
-
 .error-message {
-    color: red;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.8);
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+	color: red;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: rgba(255, 255, 255, 0.8);
+	padding: 10px 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
 }
 
 .message-container {
-    display: flex;
-    flex-direction: column;
-    margin: 5px 0;
+	display: flex;
+	flex-direction: column;
+	margin: 5px 0;
 }
 
 .message {
-    display: inline-block;
-    max-width: 60%;
-    padding: 10px;
-    border-radius: 10px;
-    margin: 5px 0;
-    word-wrap: break-word;
+	display: inline-block;
+	max-width: 60%;
+	padding: 10px;
+	border-radius: 10px;
+	margin: 5px 0;
+	word-wrap: break-word;
 }
 
 .message.user {
-    background-color: #dd4620;
-    align-self: flex-end;
-    border-top-right-radius: 0;
+	background-color: black;
+	align-self: flex-end;
+	border-top-right-radius: 0;
+	color: white;
 }
 
 .message.recipient {
-    background-color: #f1d533;
-    align-self: flex-end;
-    border-top-left-radius: 0;
-    margin-left: 5%;
+	background-color: #333;
+	align-self: flex-end;
+	border-top-left-radius: 0;
+	margin-left: 5%;
+	color: white;
 }
 
 .timestamp {
-    font-size: 0.6rem;
-    color: grey;
-    margin-top: 2px;
-    margin-left: 5px;
-    align-self: flex-end;
+	font-size: 0.6rem;
+	color: black;
+	margin-top: 2px;
+	margin-left: 5px;
+	align-self: flex-end;
 }
 
 .topBar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
 }
 
 .cogButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-    margin-left: 10px;
-    color: #333;
-    position: relative;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 1.5rem;
+	margin-left: 10px;
+	color: #333;
+	position: relative;
 }
 
 .dropdown {
-    position: relative;
-    display: inline-block;
+	position: relative;
+	display: inline-block;
 }
 
 .dropdownContent {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    bottom: 40px; /* Position the dropdown above the cog button */
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	background-color: #f9f9f9;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+	bottom: 40px; /* Position the dropdown above the cog button */
 }
 
 .dropdownContent button {
-    color: black;
-    padding: 8px 16px;
-    text-decoration: none;
-    display: block;
-    background: white;
-    border: none;
-    cursor: pointer;
+	color: black;
+	padding: 8px 16px;
+	text-decoration: none;
+	display: block;
+	background: white;
+	border: none;
+	cursor: pointer;
 }
 
 .dropdownContent button:hover {
-    background-color: #f1f1f1;
+	background-color: #f1f1f1;
 }
 
 .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: white;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
 }
 
 .modalContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .selectChat {
-    appearance: none;
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    margin-right: 1px;
-    cursor: pointer;
+	appearance: none;
+	background-color: #333;
+	color: white;
+	padding: 10px;
+	border: none;
+	border-radius: 5px;
+	font-size: 1rem;
+	margin-right: 1px;
+	cursor: pointer;
 }
 
 .selectChat option {
-    background-color: white;
-    color: black;
-    padding: 10px;
+	background-color: white;
+	color: black;
+	padding: 10px;
 }
 
 .selectChat::-ms-expand {
-    display: none;
+	display: none;
 }
 
 .selectChat::after {
-    content: '▼';
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    pointer-events: none;
+	content: "▼";
+	position: absolute;
+	top: 50%;
+	right: 15px;
+	transform: translateY(-50%);
+	pointer-events: none;
 }
 
 .bottomBar {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    background-color: rgba(0, 0, 0, 0.15);
-    width: 100%;
-    box-sizing: border-box;
-    backdrop-filter: blur(10px);
+	display: flex;
+	align-items: center;
+	padding: 0.5rem;
+	background-color: rgba(0, 0, 0, 0.15);
+	width: 100%;
+	box-sizing: border-box;
+	backdrop-filter: blur(10px);
 }
 
 .contentContainer {
-    height: 93vh;
-    display: flex;
-    flex-direction: column;
+	height: 93vh;
+	display: flex;
+	flex-direction: column;
+	background-image: linear-gradient(
+		to bottom right,
+		rgb(199, 0, 0),
+		rgb(255, 200, 0)
+	);
 }
 
 .profilePicture {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    margin-right: 10px;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	margin-right: 10px;
 }
 .recipientInfo {
-    display: flex;
-    align-items: center;
-    margin: 10px 0px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  .recipientProfilePicture {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    margin-left: 3%;
-    margin-right: 10px;
-    border: 2px solid rgb(240, 130, 4); /* Added border */
+	display: flex;
+	align-items: center;
+	margin: 10px 0px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+	color: white;
 }
-  
-  .recipientName {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
+.recipientProfilePicture {
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	margin-left: 3%;
+	margin-right: 10px;
+	border: 2px solid rgb(240, 130, 4); /* Added border */
+}
+
+.recipientName {
+	font-size: 1.5rem;
+	font-weight: bold;
+}
