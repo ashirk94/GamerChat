@@ -9,7 +9,7 @@
 		"dev": "concurrently \"npm run server\" \"npm run client\" ",
 		"start-chat-server": "node server/index.js",
 		"heroku-postbuild": "cd client && npm install && npm run build",
-		"clean-install": "rm -rf node_modules && rm -rf frontend/node_modules && rm package-lock.json && rm frontend/package-lock.json && npm install && cd frontend && npm install"
+		"clean-install": "rm -rf node_modules && rm -rf client/node_modules && rm package-lock.json && rm client/package-lock.json && npm install && cd client && npm install"
 	},
 	"author": "",
 	"license": "ISC",
