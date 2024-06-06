@@ -8,7 +8,8 @@
 		"client": "npm run dev --prefix client && start http://localhost:3000",
 		"dev": "concurrently \"npm run server\" \"npm run client\" ",
 		"start-chat-server": "node server/index.js",
-		"heroku-postbuild": "cd client && npm install && npm run build"
+		"heroku-postbuild": "cd client && npm install && npm run build",
+		"clean-install": "rm -rf node_modules && rm -rf frontend/node_modules && rm package-lock.json && rm frontend/package-lock.json && npm install && cd frontend && npm install"
 	},
 	"author": "",
 	"license": "ISC",
