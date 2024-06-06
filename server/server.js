@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === "production") {
 	app.use(express.static(path.join(__dirname, "client", "dist")));
 
 	// Handles React routing, return all requests to React app
-	app.get("*", (req, res) => {
+	app.get("*", (req, res, next) => {
 		if (req.originalUrl.startsWith("/api")) {
 			// Lets API requests be handled by other routes
 			next();
@@ -43,8 +43,6 @@ if (process.env.NODE_ENV === "production") {
 			res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 		}
 	});
-} else {
-	app.get("/", (req, res) => res.send("Server is ready"));
 }
 
 const server = createServer(app); // http server
