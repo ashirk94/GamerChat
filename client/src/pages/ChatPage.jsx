@@ -363,6 +363,7 @@ const ChatPage = () => {
 						</select>
 						<div className={styles.dropdown} ref={dropdownRef}>
 							<button
+								type="button"
 								className={styles.cogButton}
 								onClick={handleCogClick}>
 								<FaCog />
