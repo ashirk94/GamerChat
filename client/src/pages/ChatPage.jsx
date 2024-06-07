@@ -33,7 +33,6 @@ const ChatPage = () => {
 		}
 
 		newSocket.on("chat-message", (msg) => {
-			console.log("Received chat-message:", msg);
 			if (
 				(msg.recipient === selectedRecipient &&
 					msg.sender === userInfo.displayName) ||
@@ -159,7 +158,6 @@ const ChatPage = () => {
 					)}`;
 					data.profilePicture = profilePicture;
 				}
-				console.log("Formatted recipient info:", data);
 				setRecipientInfo(data);
 			})
 			.catch((error) =>
@@ -310,36 +308,44 @@ const ChatPage = () => {
 					</h2>
 				</div>
 			)}
-			<ul id="messages" className={styles.messages}>
-				{messages.map((msg, index) => (
-					<li
-						key={index}
-						className={`${styles.messageContainer} ${
-							msg.sender === userInfo.displayName
-								? styles.user
-								: styles.recipient
-						}`}>
-						<div
-							className={`${styles.message} ${
+			<div className={styles.mainContent}>
+				<ul id="messages" className={styles.messages}>
+					{messages.map((msg, index) => (
+						<li
+							key={index}
+							className={`${styles.messageContainer} ${
 								msg.sender === userInfo.displayName
 									? styles.user
 									: styles.recipient
 							}`}>
-							<strong>{msg.sender}</strong>: {msg.text}
-						</div>
-						<span className={styles.timestamp}>
-							{new Date(msg.timestamp).toLocaleDateString() ===
-							new Date().toLocaleDateString()
-								? new Date(msg.timestamp).toLocaleTimeString(
-										[],
-										{ hour: "2-digit", minute: "2-digit" }
-								  )
-								: new Date(msg.timestamp).toLocaleDateString()}
-						</span>
-					</li>
-				))}
-				<div ref={messagesEndRef}></div>
-			</ul>
+							<div
+								className={`${styles.message} ${
+									msg.sender === userInfo.displayName
+										? styles.user
+										: styles.recipient
+								}`}>
+								<strong>{msg.sender}</strong>: {msg.text}
+							</div>
+							<span className={styles.timestamp}>
+								{new Date(
+									msg.timestamp
+								).toLocaleDateString() ===
+								new Date().toLocaleDateString()
+									? new Date(
+											msg.timestamp
+									  ).toLocaleTimeString([], {
+											hour: "2-digit",
+											minute: "2-digit"
+									  })
+									: new Date(
+											msg.timestamp
+									  ).toLocaleDateString()}
+							</span>
+						</li>
+					))}
+					<div ref={messagesEndRef}></div>
+				</ul>
+			</div>
 			<div id="form-container" className={styles.formContainer}>
 				<form id="form" onSubmit={handleSubmit} className={styles.form}>
 					<div className={styles.leftControls}>
@@ -379,6 +385,7 @@ const ChatPage = () => {
 						autoComplete="off"
 						value={message}
 						onChange={handleChange}
+						className="msg-submit"
 					/>
 					<button type="submit">Send</button>
 				</form>
