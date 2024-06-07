@@ -62,16 +62,11 @@ const io = new SocketIoServer(server, {
 const users = {};
 
 io.on("connection", (socket) => {
-	console.log("a user connected");
-
 	socket.on("register", (displayName) => {
 		users[displayName] = socket.id;
-		console.log(`User registered: ${displayName}`);
 	});
 
 	socket.on("chat-message", (msg) => {
-		console.log("message: " + JSON.stringify(msg));
-
 		const recipientSocketId = users[msg.recipient];
 		if (recipientSocketId) {
 			io.to(recipientSocketId).emit("chat-message", msg);
@@ -82,8 +77,6 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("disconnect", () => {
-		console.log("user disconnected");
-
 		// Remove the user from the users object
 		for (const displayName in users) {
 			if (users[displayName] === socket.id) {
@@ -93,11 +86,7 @@ io.on("connection", (socket) => {
 		}
 	});
 });
-// Logging middleware for debugging
-app.use((req, res, next) => {
-	console.log(`Received request: ${req.method} ${req.url}`);
-	next();
-});
+
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);

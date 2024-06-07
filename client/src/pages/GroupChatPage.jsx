@@ -14,7 +14,6 @@ const GroupChatPage = () => {
 
 		// Listen for messages from the server
 		newSocket.on("chat-message", (msg) => {
-			console.log("Message received from the server:", msg);
 			setMessages((prevMessages) => [...prevMessages, msg]);
 		});
 

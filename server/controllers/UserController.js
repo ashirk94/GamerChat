@@ -55,7 +55,8 @@ const loginUser = asyncHandler(async (req, res) => {
 			displayName: user.displayName,
 			profilePicture: user.profilePicture
 				? {
-						data: user.profilePicture.data.toString("base64"),
+						data:
+							user.profilePicture.data.toString("base64") || null,
 						contentType: user.profilePicture.contentType
 				  }
 				: null
@@ -137,12 +138,15 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
 				bio: user.bio,
 				location: user.location,
 				phone: user.phone,
-				profilePicture: user.profilePicture
-					? {
-							data: user.profilePicture.data.toString("base64"),
-							contentType: user.profilePicture.contentType
-					  }
-					: null
+				profilePicture:
+					user.profilePicture && user.profilePicture.data
+						? {
+								data: user.profilePicture.data.toString(
+									"base64"
+								),
+								contentType: user.profilePicture.contentType
+						  }
+						: null
 			});
 		} else {
 			res.status(404).send("User not found, cannot get user data");

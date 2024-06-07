@@ -8,7 +8,17 @@ body {
 	flex-direction: column;
 }
 
-/* Ensure the top bar is fixed */
+.contentContainer {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	background-image: linear-gradient(
+		to bottom right,
+		rgb(199, 0, 0),
+		rgb(255, 200, 0)
+	);
+}
+
 .top-bar {
 	position: fixed;
 	top: 0;
@@ -24,53 +34,76 @@ body {
 	z-index: 1000;
 }
 
-/* Add padding-top to create space for the fixed top bar */
-.main-content {
-	padding-top: 50px;
+.mainContent {
+	padding-top: 50px; /* Adjust this if your top-bar height changes */
 	flex-grow: 1;
-	overflow-y: auto;
+	display: flex;
+	justify-content: center;
+	overflow: hidden; /* Prevent extra scrollbar */
 }
 
-/* Update the messages list */
-#messages {
-	overflow: auto;
+.messages {
 	list-style-type: none;
 	padding: 0;
+	margin: 0; /* Remove margin to avoid extra space */
 	display: flex;
 	flex-direction: column;
-	align-items: flex-end;
-	overflow-y: auto;
-	flex-grow: 1;
-	padding-bottom: 60px; /* Adjust this to create space for the input bar */
+	align-items: center;
+	width: 100%;
+	max-width: 800px; /* Increase width to cover more of the screen */
+	overflow-y: auto; /* Only this element should be scrollable */
+	padding-bottom: 100px; /* Create more space for the input bar */
+	padding-right: 20px !important;
 }
 
-#messages > li {
-	padding: 0.5rem 1rem;
-	background: none;
+.messages::-webkit-scrollbar {
+	width: 12px;
 }
 
-/* Update the form container */
-#form-container {
-	background: rgba(0, 0, 0, 0.15);
+.messages::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+	background-color: black;
+	border-radius: 6px;
+	border: 3px solid transparent; /* Move scrollbar to the right */
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+	background-color: #333;
+}
+
+.formContainer {
+	background: grey;
 	padding: 0.25rem;
 	display: flex;
 	align-items: center;
-	height: 3rem;
+	height: 3rem; /* Increased height for better look */
 	box-sizing: border-box;
-	backdrop-filter: blur(10px);
+	width: 80%; /* Set the width to about 80% of the page */
+	max-width: 800px; /* Set a max width for the form container */
+	margin: 20px auto; /* Center the form container with some margin */
+	border-radius: 6px;
 }
 
-/* Ensure the input and button styles are correct */
+.form {
+	display: flex;
+	width: 100%; /* Ensure the form takes up the full width of the container */
+}
+
 #input {
-	border: none;
-	padding: 0 1rem;
-	flex-grow: 1;
-	border-radius: 2rem;
-	margin: 0.25rem;
+	border: none !important;
+	padding: 0 1rem !important;
+	flex-grow: 1 !important;
+	border-radius: 2rem !important;
+	margin: 0.25rem !important;
+	height: 2rem !important; /* Adjusted height */
+	background: white !important; /* Ensure the background is white */
 }
 
 #input:focus {
-	outline: none;
+	outline: none !important;
 }
 
 #form > button {
@@ -81,9 +114,12 @@ body {
 	border-radius: 3px;
 	outline: none;
 	color: #fff;
+	height: 2rem; /* Match the height of the input */
+	display: flex;
+	align-items: center;
 }
 
-.error-message {
+.errorMessage {
 	color: red;
 	position: fixed;
 	top: 50%;
@@ -96,40 +132,40 @@ body {
 	z-index: 1000;
 }
 
-.message-container {
+.messageContainer {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row; /* Change to row to place timestamp next to message */
+	align-items: center;
 	margin: 5px 0;
 }
 
 .message {
 	display: inline-block;
-	max-width: 60%;
-	padding: 10px;
-	border-radius: 10px;
-	margin: 5px 0;
+	max-width: 80%; /* Increase to cover more of the screen */
+	padding: 5px 10px; /* Reduced padding */
+	border-radius: 10px; /* Round all corners */
+	margin: 0 5px 0 0; /* Adjust margin to align with timestamp */
 	word-wrap: break-word;
+	line-height: 1.5; /* Adjust line height */
 }
 
-.message.user {
+.user {
 	background-color: black;
-	align-self: flex-end;
-	border-top-right-radius: 0;
+	align-self: flex-start; /* Align sender messages to the left */
+	border-radius: 10px; /* Round all corners */
 	color: white;
 }
 
-.message.recipient {
+.recipient {
 	background-color: #333;
-	align-self: flex-end;
-	border-top-left-radius: 0;
-	margin-left: 5%;
+	align-self: flex-end; /* Align recipient messages to the right */
+	border-radius: 10px; /* Round all corners */
 	color: white;
 }
 
 .timestamp {
 	font-size: 0.6rem;
-	color: black;
-	margin-top: 2px;
+	color: white; /* Set timestamp color to white */
 	margin-left: 5px;
 	align-self: flex-end;
 }
@@ -201,11 +237,14 @@ body {
 	appearance: none;
 	background-color: #333;
 	color: white;
-	padding: 10px;
-	border: none;
+	border: none !important;
+	padding: 5px;
 	border-radius: 5px;
 	font-size: 1rem;
 	margin-right: 1px;
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-bottom: 2px;
 	cursor: pointer;
 }
 
@@ -238,23 +277,13 @@ body {
 	backdrop-filter: blur(10px);
 }
 
-.contentContainer {
-	height: 93vh;
-	display: flex;
-	flex-direction: column;
-	background-image: linear-gradient(
-		to bottom right,
-		rgb(199, 0, 0),
-		rgb(255, 200, 0)
-	);
-}
-
 .profilePicture {
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
 	margin-right: 10px;
 }
+
 .recipientInfo {
 	display: flex;
 	align-items: center;
@@ -262,7 +291,10 @@ body {
 	padding-bottom: 10px;
 	border-bottom: 1px solid #ddd;
 	color: white;
+	justify-content: center;
+	padding-right: 40px;
 }
+
 .recipientProfilePicture {
 	width: 70px;
 	height: 70px;
@@ -275,4 +307,25 @@ body {
 .recipientName {
 	font-size: 1.5rem;
 	font-weight: bold;
+}
+
+.form {
+	display: flex;
+	width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.formContainer {
+		width: 90%; /* Set the width to 90% for smaller screens */
+		bottom: 5px; /* Adjust the bottom position for smaller screens */
+	}
+
+	#input {
+		height: 1.8rem !important; /* Adjust height for smaller screens */
+	}
+
+	#form > button {
+		height: 1.8rem; /* Adjust height to match the input on smaller screens */
+	}
 }
