@@ -79,34 +79,40 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findById(req.user._id);
 
-		if (user) {
-			user.displayName = req.body.displayName || user.displayName;
-			user.fullName = req.body.fullName || user.fullName;
-			user.location = req.body.location || user.location;
-			user.bio = req.body.bio || user.bio;
-			user.phone = req.body.phone || user.phone;
-			user.email = req.body.email || user.email;
-			user.visibility = req.body.visibility || user.visibility;
+		if (!user) {
+			console.error("User not found with ID:", req.user._id);
+			res.status(404).json({ message: "User not found" });
+			return;
+		}
 
-			if (req.file) {
-				user.profilePicture = {
-					data: req.file.buffer,
-					contentType: req.file.mimetype
-				};
-			}
+		user.displayName = req.body.displayName || user.displayName;
+		user.fullName = req.body.fullName || user.fullName;
+		user.location = req.body.location || user.location;
+		user.bio = req.body.bio || user.bio;
+		user.phone = req.body.phone || user.phone;
+		user.email = req.body.email || user.email;
+		user.visibility = req.body.visibility || user.visibility;
 
-			const updatedUser = await user.save();
+		if (req.file) {
+			user.profilePicture = {
+				data: req.file.buffer,
+				contentType: req.file.mimetype
+			};
+		}
 
-			res.json({
-				_id: updatedUser._id,
-				displayName: updatedUser.displayName,
-				fullName: updatedUser.fullName,
-				location: updatedUser.location,
-				bio: updatedUser.bio,
-				phone: updatedUser.phone,
-				email: updatedUser.email,
-				visibility: updatedUser.visibility,
-				profilePicture: updatedUser.profilePicture
+		const updatedUser = await user.save();
+
+		res.json({
+			_id: updatedUser._id,
+			displayName: updatedUser.displayName,
+			fullName: updatedUser.fullName,
+			location: updatedUser.location,
+			bio: updatedUser.bio,
+			phone: updatedUser.phone,
+			email: updatedUser.email,
+			visibility: updatedUser.visibility,
+			profilePicture:
+				updatedUser.profilePicture && updatedUser.profilePicture.data
 					? {
 							data: updatedUser.profilePicture.data.toString(
 								"base64"
@@ -114,13 +120,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 							contentType: updatedUser.profilePicture.contentType
 					  }
 					: null
-			});
-		} else {
-			res.status(404);
-			throw new Error("User not found");
-		}
+		});
 	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
+		console.error("Error updating user profile:", error);
+		res.status(500).send({
+			message: "Internal Server Error",
+			error: error.message
+		});
 	}
 });
 
