@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
 	Form,
 	Button,
@@ -15,12 +16,14 @@ import {
 	useUpdateUserMutation
 } from "../slices/usersApiSlice";
 import { setCredentials, setProfile, clearProfile } from "../slices/authSlice";
+import { logout } from "../slices/authSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import "../css/profilepage.css";
 
 const ProfilePage = () => {
 	const dispatch = useDispatch();
+    const navigate = useNavigate();
 	const { profile, userInfo } = useSelector((state) => state.auth);
 
 	const {
@@ -46,18 +49,26 @@ const ProfilePage = () => {
 	const [profilePicturePreview, setProfilePicturePreview] = useState(null);
 	const [successMessage, setSuccessMessage] = useState("");
 
-	useEffect(() => {
-		if (userInfo) {
-			dispatch(clearProfile()); // Clear any previous profile data
-			setLoading(true); // Set loading to true when fetching new profile data
-			refetchProfile(); // Fetch new profile data
-		}
-	}, [userInfo, refetchProfile, dispatch]);
+    useEffect(() => {
+        if (userInfo) {
+          dispatch(clearProfile()); // Clears any previous profile data
+          setLoading(true); // Sets loading to true when fetching new profile data
+          refetchProfile()
+            .then(response => {
+              if (response.error && response.error.status === 401) {
+                // Logs out and redirects to login
+                dispatch(logout());
+                navigate("/login");
+              }
+            })
+            .catch(error => console.error("Error fetching profile:", error));
+        }
+      }, [userInfo, refetchProfile, dispatch, navigate]);
 
 	useEffect(() => {
 		if (userProfile) {
 			dispatch(setProfile(userProfile));
-			setLoading(false); // Set loading to false when profile data is set
+			setLoading(false); // Sets loading to false when profile data is set
 		}
 	}, [userProfile, dispatch]);
 

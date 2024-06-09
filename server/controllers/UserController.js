@@ -174,11 +174,22 @@ const getUserByDisplayName = asyncHandler(async (req, res) => {
 	}
 });
 
+const getAllUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    if (users) {
+        res.json(users);
+    } else {
+        res.status(404);
+        throw new Error("No users found");
+    }
+})
+
 export {
 	registerUser,
 	loginUser,
 	logoutUser,
 	updateUserProfile,
 	getUserByDisplayName,
-	getUserProfile
+	getUserProfile,
+    getAllUsers
 };

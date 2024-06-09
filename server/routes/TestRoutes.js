@@ -7,9 +7,10 @@ router.get("/health", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-	res.status(401).send("Unauthorized"); // Simplified for testing
+	res.status(401).send("Unauthorized");
 });
 
+// change this to something besides comment
 router.post("/comment", (req, res) => {
 	const { comment } = req.body;
 	if (comment.includes("<script>")) {

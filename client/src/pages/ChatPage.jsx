@@ -1,8 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { io } from "socket.io-client";
-import styles from "../css/chat.module.css";
 import { FaCog } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../slices/authSlice";
+import {
+	Container,
+	Row,
+	Col,
+	Form,
+	Button,
+	Modal,
+	ListGroup,
+	InputGroup,
+	Dropdown
+} from "react-bootstrap";
+import {
+	useGetGroupsQuery,
+	useCreateGroupMutation,
+	useSendMessageToGroupMutation
+} from "../slices/groupsApiSlice";
+import {
+	useGetMessagesQuery,
+	useSendMessageMutation
+} from "../slices/messagesApiSlice";
 
 const ChatPage = () => {
 	const { userInfo } = useSelector((state) => state.auth);
@@ -12,12 +33,47 @@ const ChatPage = () => {
 	const [messages, setMessages] = useState([]);
 	const [socket, setSocket] = useState(null);
 	const [recipients, setRecipients] = useState([]);
+	const [groups, setGroups] = useState([]);
 	const [error, setError] = useState(null);
 	const [showDropdown, setShowDropdown] = useState(false);
 	const [showNewRecipientModal, setShowNewRecipientModal] = useState(false);
+	const [showNewGroupModal, setShowNewGroupModal] = useState(false);
 	const [newRecipient, setNewRecipient] = useState("");
+	const [newGroup, setNewGroup] = useState("");
+	const [newGroupUsers, setNewGroupUsers] = useState([]);
+	const [allUsers, setAllUsers] = useState([]);
 	const dropdownRef = useRef(null);
 	const messagesEndRef = useRef(null);
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
+	const { data: groupData, refetch: refetchGroups } = useGetGroupsQuery();
+	const [createGroup] = useCreateGroupMutation();
+	const [sendMessageToGroup] = useSendMessageToGroupMutation();
+	const { data: messageData, refetch: refetchMessages } = useGetMessagesQuery(
+		userInfo?.displayName
+	);
+	const [sendMessage] = useSendMessageMutation();
+
+	// Fetch users for group chat selection
+	useEffect(() => {
+		fetch("/api/users")
+			.then((response) => response.json())
+			.then((data) => setAllUsers(data))
+			.catch((error) => console.error("Error fetching users:", error));
+	}, []);
+
+	useEffect(() => {
+		if (groupData) {
+			setGroups(groupData);
+		}
+	}, [groupData]);
+
+	useEffect(() => {
+		if (messageData) {
+			setMessages(messageData);
+		}
+	}, [messageData]);
 
 	useEffect(() => {
 		let newSocket;
@@ -37,16 +93,11 @@ const ChatPage = () => {
 				(msg.recipient === selectedRecipient &&
 					msg.sender === userInfo.displayName) ||
 				(msg.sender === selectedRecipient &&
-					msg.recipient === userInfo.displayName)
+					msg.recipient === userInfo.displayName) ||
+				msg.recipientGroup === selectedRecipient
 			) {
 				setMessages((prevMessages) => {
-					const isDuplicate = prevMessages.some(
-						(message) =>
-							message.sender === msg.sender &&
-							message.recipient === msg.recipient &&
-							message.timestamp === msg.timestamp
-					);
-					if (isDuplicate) {
+					if (prevMessages.some((m) => m._id === msg._id)) {
 						return prevMessages;
 					}
 					return [...prevMessages, msg];
@@ -71,35 +122,72 @@ const ChatPage = () => {
 					msg.sender
 				]);
 			}
+			if (msg.group && !groups.includes(msg.group)) {
+				setGroups((prevGroups) => [...prevGroups, msg.group]);
+			}
+		});
+
+		newSocket.on("group-message", (msg) => {
+			if (msg.group === selectedRecipient) {
+				setMessages((prevMessages) => [...prevMessages, msg]);
+			}
 		});
 
 		return () => {
 			newSocket.disconnect();
 		};
-	}, [userInfo, recipients, selectedRecipient]);
+	}, [userInfo, recipients, selectedRecipient, groups]);
 
 	useEffect(() => {
 		if (userInfo) {
+			refetchMessages();
+		}
+	}, [userInfo, refetchMessages]);
+
+	useEffect(() => {
+		if (userInfo) {
+			refetchGroups();
+		}
+	}, [userInfo, refetchGroups]);
+
+	useEffect(() => {
+		if (userInfo) {
+			// Fetch messages for the user to populate recipients
 			fetch(`/api/messages/${userInfo.displayName}`)
 				.then((response) => response.json())
 				.then((data) => {
-					const newRecipients = new Set(recipients);
+					const newRecipients = new Set();
 					data.forEach((msg) => {
-						newRecipients.add(msg.sender);
-						newRecipients.add(msg.recipient);
+						if (msg.sender !== userInfo.displayName) {
+							newRecipients.add(msg.sender);
+						}
+						if (msg.recipient !== userInfo.displayName) {
+							newRecipients.add(msg.recipient);
+						}
 					});
 					setRecipients([...newRecipients]);
 				})
 				.catch((error) =>
 					console.error("Error fetching messages:", error)
 				);
+
+			// Fetch groups for the user
+			refetchGroups();
 		}
-	}, [userInfo]);
+	}, [userInfo, refetchGroups]);
+
+	useEffect(() => {
+		if (groupData) {
+			setGroups(groupData);
+		}
+	}, [groupData]);
 
 	useEffect(() => {
 		if (selectedRecipient && userInfo) {
 			fetchMessagesForRecipient(selectedRecipient);
 			fetchRecipientInfo(selectedRecipient);
+		} else {
+			setMessages([]);
 		}
 	}, [selectedRecipient, userInfo]);
 
@@ -109,81 +197,163 @@ const ChatPage = () => {
 
 	const fetchMessagesForRecipient = (recipient) => {
 		if (userInfo) {
-			fetch(`/api/messages/${userInfo.displayName}`)
-				.then((response) => response.json())
-				.then((data) => {
-					const filteredMessages = data.filter(
-						(msg) =>
-							(msg.recipient === recipient &&
-								msg.sender === userInfo.displayName) ||
-							(msg.sender === recipient &&
-								msg.recipient === userInfo.displayName)
-					);
-					setMessages(filteredMessages);
+			const isGroupChat = groups.some((g) => g._id === recipient);
 
-					const unseenMessages = filteredMessages.filter(
-						(msg) => !msg.seen
-					);
-					if (unseenMessages.length > 0) {
-						unseenMessages.forEach((msg) => (msg.seen = true));
-						fetch("/api/messages/seen", {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json"
-							},
-							body: JSON.stringify({
-								user: userInfo.displayName,
-								recipient: selectedRecipient
-							})
-						});
+			if (isGroupChat) {
+				fetch(`/api/groups/${recipient}/messages`, {
+					headers: {
+						Authorization: `Bearer ${userInfo.token}`
 					}
 				})
-				.catch((error) =>
-					console.error("Error fetching messages:", error)
-				);
+					.then((response) => response.json())
+					.then((data) => {
+						setMessages(data);
+					})
+					.catch((error) =>
+						console.error("Error fetching group messages:", error)
+					);
+			} else {
+				fetch(`/api/messages/${userInfo.displayName}`)
+					.then((response) => response.json())
+					.then((data) => {
+						const filteredMessages = data.filter(
+							(msg) =>
+								(msg.recipient === recipient &&
+									msg.sender === userInfo.displayName) ||
+								(msg.sender === recipient &&
+									msg.recipient === userInfo.displayName)
+						);
+						setMessages(filteredMessages);
+
+						const unseenMessages = filteredMessages.filter(
+							(msg) => !msg.seen
+						);
+						if (unseenMessages.length > 0) {
+							unseenMessages.forEach((msg) => (msg.seen = true));
+							fetch("/api/messages/seen", {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json"
+								},
+								body: JSON.stringify({
+									user: userInfo.displayName,
+									recipient
+								})
+							});
+						}
+					})
+					.catch((error) =>
+						console.error("Error fetching messages:", error)
+					);
+			}
 		}
 	};
 
 	const fetchRecipientInfo = (recipient) => {
-		fetch(`/api/users/user/${recipient}`)
-			.then((response) => response.json())
-			.then((data) => {
-				if (data.profilePicture) {
-					const profilePicture = `data:${
-						data.profilePicture.contentType
-					};base64,${btoa(
-						String.fromCharCode(
-							...new Uint8Array(data.profilePicture.data.data)
-						)
-					)}`;
-					data.profilePicture = profilePicture;
-				}
-				setRecipientInfo(data);
-			})
-			.catch((error) =>
-				console.error("Error fetching recipient info:", error)
-			);
+		if (!recipient) return;
+
+		const group = groups.find((g) => g._id === recipient);
+		if (group) {
+			setRecipientInfo({ displayName: group.name });
+		} else {
+			fetch(`/api/users/user/${recipient}`)
+				.then((response) => response.json())
+				.then((data) => {
+					if (data.profilePicture) {
+						const profilePicture = `data:${
+							data.profilePicture.contentType
+						};base64,${btoa(
+							String.fromCharCode(
+								...new Uint8Array(data.profilePicture.data.data)
+							)
+						)}`;
+						data.profilePicture = profilePicture;
+					}
+					setRecipientInfo(data);
+				})
+				.catch((error) =>
+					console.error("Error fetching recipient info:", error)
+				);
+		}
 	};
 
 	const handleChange = (e) => {
 		setMessage(e.target.value);
 	};
 
-	const handleSelectedRecipientChange = (e) => {
+	// const handleSelectedRecipientChange = (e) => {
+	// 	const value = e.target.value;
+	// 	if (value === "new-recipient") {
+	// 		setShowNewRecipientModal(true);
+	// 	} else if (value === "new-group") {
+	// 		setShowNewGroupModal(true);
+	// 	} else {
+	// 		setSelectedRecipient(value);
+
+	// 		// Join the group if it's a group chat
+	// 		const isGroupChat = groups.some((g) => g._id === value);
+	// 		if (isGroupChat) {
+	// 			socket.emit("join-group", value);
+	// 		}
+	// 	}
+	// };
+
+	const handleNewChatGroupChange = (e) => {
 		const value = e.target.value;
 		if (value === "new-recipient") {
 			setShowNewRecipientModal(true);
-		} else {
-			setSelectedRecipient(value);
+		} else if (value === "new-group") {
+			setShowNewGroupModal(true);
 		}
+	};
+
+	const handleSelectedRecipientChange = (e) => {
+		const value = e.target.value;
+		setSelectedRecipient(value);
+	};
+
+	const handleSelectedGroupChange = (e) => {
+		const value = e.target.value;
+		setSelectedRecipient(value);
 	};
 
 	const handleNewRecipientSubmit = (e) => {
 		e.preventDefault();
 		setSelectedRecipient(newRecipient);
-		setRecipients((prevRecipients) => [...prevRecipients, newRecipient]);
+		setRecipients((prevRecipients) => [
+			...prevRecipients.filter((rec) => rec),
+			newRecipient
+		]);
 		setShowNewRecipientModal(false);
 		setNewRecipient("");
+	};
+
+	const handleNewGroupSubmit = async (e) => {
+		e.preventDefault();
+		if (newGroup.trim() && newGroupUsers.length) {
+			try {
+				const group = await createGroup({
+					name: newGroup,
+					userIds: newGroupUsers.map((user) => user._id)
+				}).unwrap();
+				setGroups((prevGroups) => [...prevGroups, group]);
+				setShowNewGroupModal(false);
+				setNewGroup("");
+				setNewGroupUsers([]);
+			} catch (error) {
+				console.error("Error creating group:", error);
+			}
+		}
+	};
+
+	const handleUserCheckboxChange = (e, user) => {
+		if (e.target.checked) {
+			setNewGroupUsers((prevUsers) => [...prevUsers, user]);
+		} else {
+			setNewGroupUsers((prevUsers) =>
+				prevUsers.filter((u) => u !== user)
+			);
+		}
 	};
 
 	const handleSubmit = async (e) => {
@@ -194,43 +364,46 @@ const ChatPage = () => {
 			selectedRecipient.trim() !== "" &&
 			userInfo
 		) {
-			const response = await fetch(
-				`/api/users/user/${selectedRecipient}`
-			);
-			if (response.status === 404) {
-				setError("Recipient not found");
-				setSelectedRecipient("");
-				setTimeout(() => {
-					setError(null);
-				}, 3000);
-				return;
-			}
+			const isGroupChat = groups.some((g) => g._id === selectedRecipient);
 
-			const timestamp = new Date().toISOString();
-			const msg = {
-				user: userInfo._id,
-				text: message,
-				sender: userInfo.displayName,
-				recipient: selectedRecipient,
-				seen: false,
-				timestamp
-			};
-			socket.emit("chat-message", msg);
-			setMessage("");
+			if (isGroupChat) {
+				const msg = {
+					text: message,
+					sender: userInfo.displayName,
+					group: selectedRecipient
+				};
+				socket.emit("group-message", msg, selectedRecipient);
+				setMessages((prevMessages) => [...prevMessages, msg]);
+				setMessage("");
 
-			fetch("/api/messages", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(msg)
-			});
+				await sendMessageToGroup({
+					groupId: selectedRecipient,
+					data: { message, sender: userInfo.displayName }
+				}).unwrap();
+			} else {
+				const timestamp = new Date().toISOString();
+				const msg = {
+					user: userInfo._id,
+					text: message,
+					sender: userInfo.displayName,
+					recipient: selectedRecipient,
+					seen: false,
+					timestamp
+				};
+				socket.emit("chat-message", msg);
+				setMessages((prevMessages) => [...prevMessages, msg]);
+				setMessage("");
 
-			if (!recipients.includes(selectedRecipient)) {
-				setRecipients((prevRecipients) => [
-					...prevRecipients,
-					selectedRecipient
-				]);
+				sendMessage(msg).catch((error) => {
+					console.error("Error sending message:", error);
+				});
+
+				if (!recipients.includes(selectedRecipient)) {
+					setRecipients((prevRecipients) => [
+						...prevRecipients,
+						selectedRecipient
+					]);
+				}
 			}
 		}
 	};
@@ -291,42 +464,59 @@ const ChatPage = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		// Fetch all users for creating groups
+		fetch("/api/users")
+			.then((response) => response.json())
+			.then((data) => {
+				if (Array.isArray(data)) {
+					setAllUsers(data);
+				} else {
+					setAllUsers([]);
+				}
+			})
+			.catch((error) => {
+				console.error("Error fetching users:", error);
+				setAllUsers([]);
+			});
+	}, []);
+
 	return (
-		<div className={styles.contentContainer}>
-			{error && <div className={styles.errorMessage}>{error}</div>}
+		<Container fluid className="content-container">
+			{error && <div className="error-message">{error}</div>}
 			{recipientInfo && (
-				<div className={styles.recipientInfo}>
+				<div className="recipient-info text-center">
 					{recipientInfo.profilePicture && (
 						<img
 							src={recipientInfo.profilePicture}
 							alt="Profile"
-							className={styles.recipientProfilePicture}
+							className="recipient-profile-picture rounded-circle"
 						/>
 					)}
-					<h2 className={styles.recipientName}>
+					<h2 className="recipient-name">
 						{recipientInfo.displayName}
 					</h2>
 				</div>
 			)}
-			<div className={styles.mainContent}>
-				<ul id="messages" className={styles.messages}>
+			<div className="main-content">
+				<ListGroup id="messages" className="messages">
 					{messages.map((msg, index) => (
-						<li
+						<ListGroup.Item
 							key={index}
-							className={`${styles.messageContainer} ${
+							className={`message-container ${
 								msg.sender === userInfo.displayName
-									? styles.user
-									: styles.recipient
+									? "user"
+									: "recipient"
 							}`}>
 							<div
-								className={`${styles.message} ${
+								className={`message ${
 									msg.sender === userInfo.displayName
-										? styles.user
-										: styles.recipient
+										? "user"
+										: "recipient"
 								}`}>
 								<strong>{msg.sender}</strong>: {msg.text}
 							</div>
-							<span className={styles.timestamp}>
+							<span className="timestamp">
 								{new Date(
 									msg.timestamp
 								).toLocaleDateString() ===
@@ -341,62 +531,118 @@ const ChatPage = () => {
 											msg.timestamp
 									  ).toLocaleDateString()}
 							</span>
-						</li>
+						</ListGroup.Item>
 					))}
 					<div ref={messagesEndRef}></div>
-				</ul>
+				</ListGroup>
 			</div>
-			<div id="form-container" className={styles.formContainer}>
-				<form id="form" onSubmit={handleSubmit} className={styles.form}>
-					<div className={styles.leftControls}>
-						<select
+			<div id="form-container" className="form-container">
+				<Form
+					id="form"
+					onSubmit={handleSubmit}
+					className="form d-flex align-items-center">
+					<div className="left-controls d-flex align-items-center">
+						{/* Combo Box for New Group/Chat */}
+						<Form.Control
+							as="select"
+							onChange={handleNewChatGroupChange}
+							value=""
+							className="select-chat me-2"
+							style={{ width: "200px", color: "white" }}>
+							<option value="" disabled>
+								New Chat/Group
+							</option>
+							<option value="new-recipient">New Chat</option>
+							<option value="new-group">New Group</option>
+						</Form.Control>
+
+						{/* Combo Box for Direct Messages */}
+						<Form.Control
+							as="select"
 							onChange={handleSelectedRecipientChange}
 							value={selectedRecipient}
-							className={styles.selectChat}>
-							<option value="">Select Chat</option>
-							<option value="new-recipient">New Chat</option>
-							{recipients.map((rec, index) => (
-								<option key={index} value={rec}>
-									{rec}
-								</option>
-							))}
-						</select>
-						<div className={styles.dropdown} ref={dropdownRef}>
-							<button
-								type="button"
-								className={styles.cogButton}
+							className="select-chat me-2"
+							style={{ width: "200px", color: "white" }}>
+							<option value="" disabled>
+								Direct Messages
+							</option>
+							{recipients
+								.filter((rec) => rec && rec.trim() !== "")
+								.map((rec, index) => (
+									<option key={index} value={rec}>
+										{rec}
+									</option>
+								))}
+						</Form.Control>
+
+						{/* Combo Box for Group Messages */}
+						<Form.Control
+							as="select"
+							onChange={handleSelectedGroupChange}
+							value={selectedRecipient}
+							className="select-chat me-2"
+							style={{ width: "200px", color: "white" }}>
+							<option value="" disabled>
+								Group Messages
+							</option>
+							{groups
+								.filter((grp) => grp && grp.name.trim() !== "")
+								.map((grp, index) => (
+									<option key={index} value={grp._id}>
+										{grp.name}
+									</option>
+								))}
+						</Form.Control>
+
+						<div className="dropdown" ref={dropdownRef}>
+							<Button
+								variant="link"
+								className="cog-button"
 								onClick={handleCogClick}>
 								<FaCog />
-							</button>
+							</Button>
 							{showDropdown && (
-								<div className={styles.dropdownContent}>
-									<button onClick={handleClearChat}>
+								<div className="dropdown-content">
+									<Button
+										variant="link"
+										onClick={handleClearChat}>
 										Clear Chat
-									</button>
-									<button onClick={handleDeleteChat}>
+									</Button>
+									<Button
+										variant="link"
+										onClick={handleDeleteChat}>
 										Delete Chat
-									</button>
+									</Button>
 								</div>
 							)}
 						</div>
 					</div>
-					<input
-						id="input"
-						type="text"
-						autoComplete="off"
-						value={message}
-						onChange={handleChange}
-						className="msg-submit"
-					/>
-					<button type="submit">Send</button>
-				</form>
+					<InputGroup className="flex-grow-1">
+						<Form.Control
+							type="text"
+							autoComplete="off"
+							value={message}
+							onChange={handleChange}
+							className="msg-submit"
+						/>
+						<Button type="submit" variant="dark">
+							Send
+						</Button>
+					</InputGroup>
+				</Form>
 			</div>
-			{showNewRecipientModal && (
-				<div className={styles.modal}>
-					<div className={styles.modalContent}>
-						<h2>Start New Chat</h2>
-						<form onSubmit={handleNewRecipientSubmit}>
-							<input
+			<Modal
+				show={showNewRecipientModal}
+				onHide={() => setShowNewRecipientModal(false)}
+				backdrop="static"
+				keyboard={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Start New Chat</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form onSubmit={handleNewRecipientSubmit}>
+						<Form.Group controlId="formNewRecipient">
+							<Form.Control
 								type="text"
 								placeholder="Enter Username"
 								value={newRecipient}
@@ -404,18 +650,74 @@ const ChatPage = () => {
 									setNewRecipient(e.target.value)
 								}
 								required
+								autoFocus
 							/>
-							<button type="submit">Start Chat</button>
-							<button
-								type="button"
-								onClick={() => setShowNewRecipientModal(false)}>
-								Cancel
-							</button>
-						</form>
-					</div>
-				</div>
-			)}
-		</div>
+						</Form.Group>
+						<Button type="submit" variant="dark">
+							Start Chat
+						</Button>
+						<Button
+							variant="secondary"
+							onClick={() => setShowNewRecipientModal(false)}>
+							Cancel
+						</Button>
+					</Form>
+				</Modal.Body>
+			</Modal>
+
+			<Modal
+				show={showNewGroupModal}
+				onHide={() => setShowNewGroupModal(false)}
+				backdrop="static"
+				keyboard={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Create New Group</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form onSubmit={handleNewGroupSubmit}>
+						<Form.Group controlId="formGroupName">
+							<Form.Label>Group Name</Form.Label>
+							<Form.Control
+								type="text"
+								placeholder="Enter group name"
+								value={newGroup}
+								onChange={(e) => setNewGroup(e.target.value)}
+								required
+								autoFocus
+							/>
+						</Form.Group>
+						<Form.Group>
+							<Form.Label>Select Users</Form.Label>
+							<ListGroup>
+								{allUsers.map((user) => (
+									<ListGroup.Item key={user._id}>
+										<Form.Check
+											type="checkbox"
+											id={user.displayName}
+											label={user.displayName}
+											onChange={(e) =>
+												handleUserCheckboxChange(
+													e,
+													user
+												)
+											}
+										/>
+									</ListGroup.Item>
+								))}
+							</ListGroup>
+						</Form.Group>
+						<Button variant="dark" type="submit">
+							Create Group
+						</Button>
+						<Button
+							variant="secondary"
+							onClick={() => setShowNewGroupModal(false)}>
+							Cancel
+						</Button>
+					</Form>
+				</Modal.Body>
+			</Modal>
+		</Container>
 	);
 };
 

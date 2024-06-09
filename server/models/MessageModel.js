@@ -9,6 +9,7 @@ const MessageSchema = new Schema(
 		text: { type: String, required: true },
 		sender: String,
 		recipient: String,
+        recipientGroup: String,
 		seen: Boolean,
 		timestamp: {
 			type: Date,

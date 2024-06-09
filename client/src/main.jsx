@@ -14,13 +14,13 @@ import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
-import GroupChatPage from "./pages/GroupChatPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./css/main.css";
 import "./css/custom.css";
 import "./css/custom.scss";
+import "./css/chat.css";
 
 // Using React Router to route to our pages
 const router = createBrowserRouter(
@@ -42,14 +42,6 @@ const router = createBrowserRouter(
 				element={
 					<ProtectedRoute>
 						<ChatPage />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/groupchat"
-				element={
-					<ProtectedRoute>
-						<GroupChatPage />
 					</ProtectedRoute>
 				}
 			/>

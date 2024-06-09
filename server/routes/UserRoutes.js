@@ -5,7 +5,8 @@ import {
 	logoutUser,
 	getUserByDisplayName,
 	updateUserProfile,
-	getUserProfile
+	getUserProfile,
+    getAllUsers
 } from "../controllers/UserController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { upload } from "../middleware/uploadMiddleware.js";
@@ -23,5 +24,6 @@ router.put(
 	updateUserProfile
 );
 router.get("/user/:displayName", getUserByDisplayName);
+router.get("/", protect, getAllUsers);
 
 export default router;
