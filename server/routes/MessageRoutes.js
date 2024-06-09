@@ -6,13 +6,14 @@ import {
 	markMessagesAsSeen,
 	deleteMessages
 } from "../controllers/MessageController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").post(saveMessage); // POST /api/messages
-router.route("/:displayName").get(getMessages); // GET /api/messages/:displayName
-router.route("/clear").post(clearMessages); // POST /api/messages/clear
-router.route("/delete").post(deleteMessages); // POST /api/messages/delete
-router.route("/seen").post(markMessagesAsSeen); // POST /api/messages/seen
+router.post("/", protect, saveMessage); // POST /api/messages
+router.get("/:displayName", protect, getMessages); // GET /api/messages/:displayName
+router.post("/clear", protect, clearMessages); // POST /api/messages/clear
+router.post("/delete", protect, deleteMessages); // POST /api/messages/delete
+router.post("/seen", protect, markMessagesAsSeen); // POST /api/messages/seen
 
 export default router;

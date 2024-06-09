@@ -6,10 +6,11 @@ function generateToken(res, userId) {
 		expiresIn: "5d"
 	});
 
+    const secure = process.env.NODE_ENV === "production" ? true : false;
+
 	res.cookie("jwt", token, {
 		httpOnly: true,
-		//secure: process.env.NODE_ENV === "production",
-		secure: false,
+		secure: secure,
 		samesite: "strict",
 		maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days
 	});

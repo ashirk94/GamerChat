@@ -24,7 +24,13 @@ const UserSchema = new Schema(
 		visibility: {
 			type: String,
 			default: "Public"
-		}
+		},
+		groups: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Group"
+			}
+		]
 	},
 	{ timestamps: true }
 );

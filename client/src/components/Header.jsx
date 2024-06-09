@@ -15,12 +15,12 @@ function Header() {
 
 	const logoutHandler = async () => {
 		try {
-			dispatch(clearProfile()); // Clear profile data immediately
+			dispatch(clearProfile());
 			await logoutApiCall().unwrap();
 			dispatch(logout());
 			navigate("/");
 		} catch (error) {
-			// Handle error appropriately if needed
+			console.error("Failed to log out:", error);
 		}
 	};
 
@@ -70,7 +70,7 @@ function Header() {
 										</NavDropdown.Item>
 										<NavDropdown.Item
 											onClick={logoutHandler}>
-											Logout
+											Log Out
 										</NavDropdown.Item>
 									</NavDropdown>
 								</>

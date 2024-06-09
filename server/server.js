@@ -10,6 +10,7 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDatabase from "./config/database.js";
 import userRoutes from "./routes/UserRoutes.js";
 import messageRoutes from "./routes/MessageRoutes.js";
+import groupRoutes from "./routes/GroupRoutes.js";
 
 connectDatabase();
 
@@ -58,7 +59,7 @@ const io = new SocketIoServer(server, {
 	}
 });
 
-// Store users and their socket IDs
+// Stores users and their socket IDs
 const users = {};
 
 io.on("connection", (socket) => {
@@ -72,12 +73,24 @@ io.on("connection", (socket) => {
 			io.to(recipientSocketId).emit("chat-message", msg);
 		}
 
-		// Emit the message back to the sender
+		// Emits the message back to the sender
 		socket.emit("chat-message", msg);
 	});
 
+    socket.on("group-message", (msg, groupName) => {
+        io.to(groupName).emit("group-message", msg);
+    });
+
+    socket.on("join-group", (groupName) => {
+        socket.join(groupName);
+    });
+
+    socket.on("leave-group", (groupName) => {
+        socket.leave(groupName);
+    });
+
 	socket.on("disconnect", () => {
-		// Remove the user from the users object
+		// Removes the user from the users object
 		for (const displayName in users) {
 			if (users[displayName] === socket.id) {
 				delete users[displayName];
@@ -87,9 +100,10 @@ io.on("connection", (socket) => {
 	});
 });
 
-// Routes
+// API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/groups", groupRoutes);
 
 // Error handling
 app.use(notFound);
@@ -98,5 +112,5 @@ app.use(errorHandler);
 // Runs the server
 const port = process.env.PORT || 4000;
 server.listen(port, () => {
-	console.log(`Server running at http://localhost:${port}`);
+	console.log(`Server running on port ${port}`);
 });
