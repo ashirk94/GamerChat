@@ -73,7 +73,7 @@ describe("Basic Route Tests", () => {
 
 	test("XSS prevention", async () => {
 		const response = await request(server)
-			.post("/api/messages")
+			.post("/tests")
 			.send({ comment: '<script>alert("XSS")</script>' });
 		expect(response.status).not.toBe(200);
 	});
