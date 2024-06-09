@@ -10,7 +10,7 @@ router.post("/login", (req, res) => {
 	res.status(401).send("Unauthorized");
 });
 
-router.post("/api/messages", (req, res) => {
+router.post("/", (req, res) => {
 	const { message } = req.body;
 	if (message.includes("<script>")) {
 		return res.status(400).send("Bad Request");
