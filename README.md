@@ -20,7 +20,7 @@ The front-end testing consisted of several page component tests. For the LoginPa
 
 Our system testing consisted of XSS Prevention, SQL Injection Prevention, a health check, and a nonexistent route check. Our tests mocked the database connection using 'jest.mock', and configured an Express application with custom logging middleware. The health check tests whether the server is running and if express is routing properly and sending data with a POST request. Lastly, our non-existent route test evaluates whether non-existent routes respond with the proper error (404). 
 
-In order to run our tests, run following commands:
+In order to run our tests, run following commands, starting from the root directory:
 
 ```
 cd server
@@ -29,10 +29,18 @@ cd ../client
 npm test
 ```
 
-To run our project locally, run the following command in the root directory:
+To run our project locally, run the following commands, starting from the root directory:
 ```
+npm install
+cd server
+npm install
+cd ../client
+npm install
+cd ..
 npm run dev
 ```
+
+We have both direct messages to specific users and group chat functionality implemented on the chat page, however in order to switch between a direct chat and a group chat room, the page must be refreshed. All messages from the user's chats will appear when the page is first loaded, and then the messages will be filtered once a room is selected. This bug was introduced when group chat was implemented, but since group chat is working properly, and we are out of time to update the project further, we are turning the project in as is. There is also an issue with dates in the group chat, but the bug appears to affect the frontend only and the proper date and time displays upon refresh. 
 
 The application is also running on a Heroku server.
 
