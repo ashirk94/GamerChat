@@ -16,7 +16,7 @@ Our code is highly modularized and is separated into microservices to keep our c
 
 We performed backend system tests, and some frontend feature and unit testing. We wrote 11 passing tests (4 on the backend, 7 on the frontend). We tested the Chat Page, Login Page, and Register Page. 
 
-The front-end testing consisted of several page component tests. For the LoginPage we tested if it renders correctly, and whether or not the page gracefully handles errors when the login form is submitted without any data. For the ChatPage, we tested the Delete Chat and Clear Chat features. Finally, the RegisterPage was tested to check if the page correctly handles empty submitted forms, mismatching passwords, and if it renders the page correctly. 
+The frontend testing consisted of several page component tests. For the LoginPage we tested if it renders correctly, and whether or not the page gracefully handles errors when the login form is submitted without any data. For the ChatPage, we tested the Delete Chat and Clear Chat features. Finally, the RegisterPage was tested to check if the page correctly handles empty submitted forms, mismatching passwords, and if it renders the page correctly. 
 
 Our system testing consisted of XSS Prevention, SQL Injection Prevention, a health check, and a nonexistent route check. Our tests mocked the database connection using 'jest.mock', and configured an Express application with custom logging middleware. The health check tests whether the server is running and if express is routing properly and sending data with a POST request. Lastly, our non-existent route test evaluates whether non-existent routes respond with the proper error (404). 
 
