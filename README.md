@@ -19,29 +19,3 @@ We performed backend system tests, and some frontend feature and unit testing. W
 The frontend testing consisted of several page component tests. For the LoginPage we tested if it renders correctly, and whether or not the page gracefully handles errors when the login form is submitted without any data. For the ChatPage, we tested the Delete Chat and Clear Chat features. Finally, the RegisterPage was tested to check if the page correctly handles empty submitted forms, mismatching passwords, and if it renders the page correctly. 
 
 Our system testing consisted of XSS Prevention, SQL Injection Prevention, a health check, and a nonexistent route check. Our tests mocked the database connection using 'jest.mock', and configured an Express application with custom logging middleware. The health check tests whether the server is running and if express is routing properly and sending data with a POST request. Lastly, our non-existent route test evaluates whether non-existent routes respond with the proper error (404). 
-
-In order to run our tests, run following commands, starting from the root directory:
-
-```
-cd server
-npm test
-cd ../client
-npm test
-```
-
-To run our project locally, run the following commands, starting from the root directory:
-```
-npm install
-cd server
-npm install
-cd ../client
-npm install
-cd ..
-npm run dev
-```
-
-We have both direct messages to specific users and group chat functionality implemented on the chat page, however, all messages from the current user's chats will appear when the page is first loaded. The messages will be filtered to only include messages with a specific user or group once a user name or group name is selected. This bug was introduced when group chat was implemented, but since group chat is working properly, and we are out of time to update the project further, we are turning in the project as is. There is also an issue with date/time for new messages in the group chat, but the bug appears to affect the frontend only and the proper time displays upon refresh. 
-
-The application is running on a Heroku server with continuous integration from the main branch on GitHub.
-
-Live server link: https://gamer-chat-161acd6cf748.herokuapp.com/
