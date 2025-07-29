@@ -4,9 +4,7 @@ Created by:
 - Alan Shirk
 - Joseph Gafron
 
-Repository link: https://github.com/ashirk94/GamerChat
-
-Our GamerChat project uses a Model-View-Controller architecture and separates the frontend from the backend. The frontend, built with React and styled with custom CSS and Bootstrap, has multiple page components such as ProfilePage, ChatPage, and RegisterPage. Also it has a global navbar for easy navigation through our website. We used the react-bootstrap and react-toastify libraries to build a clean modern UI with error and success messages. State management is handled with the Redux Toolkit, which uses slices such as authSlice.js and usersApiSlice to manage authentication and API interactions efficiently. authSlice.js handles user login, logout, and session management, while usersApiSlice manages API calls related to user profiles and data fetching. 
+GamerChat was made with a Model-View-Controller architecture and separates the frontend from the backend. The frontend, built with React and styled with custom CSS and Bootstrap, has multiple page components such as ProfilePage, ChatPage, and RegisterPage. Also it has a global navbar for easy navigation through our website. We used the react-bootstrap and react-toastify libraries to build a clean modern UI with error and success messages. State management is handled with the Redux Toolkit, which uses slices such as authSlice.js and usersApiSlice to manage authentication and API interactions efficiently. authSlice.js handles user login, logout, and session management, while usersApiSlice manages API calls related to user profiles and data fetching. 
     
 We used js-cookie for handling JWT tokens, ensuring secure storage and retrieval of authentication tokens. The backend, implemented in Node.js with Express, manages user authentication, profile data, and real-time messaging via Socket.io. MongoDB is used as the database to store user information, messages, and other application data. Multer is used to handle profile picture uploading. Authentication middleware is implemented to protect routes, ensuring that only authenticated users can access pages of the application that contain user data. 
 
