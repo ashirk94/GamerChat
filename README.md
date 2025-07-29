@@ -17,23 +17,3 @@ We performed backend system tests, and some frontend feature and unit testing. W
 The frontend testing consisted of several page component tests. For the LoginPage we tested if it renders correctly, and whether or not the page gracefully handles errors when the login form is submitted without any data. For the ChatPage, we tested the Delete Chat and Clear Chat features. Finally, the RegisterPage was tested to check if the page correctly handles empty submitted forms, mismatching passwords, and if it renders the page correctly. 
 
 Our system testing consisted of XSS Prevention, SQL Injection Prevention, a health check, and a nonexistent route check. Our tests mocked the database connection using 'jest.mock', and configured an Express application with custom logging middleware. The health check tests whether the server is running and if express is routing properly and sending data with a POST request. Lastly, our non-existent route test evaluates whether non-existent routes respond with the proper error (404). 
-
-In order to run our tests, run following commands, starting from the root directory:
-
-```
-cd server
-npm test
-cd ../client
-npm test
-```
-
-To run our project locally, run the following commands, starting from the root directory:
-```
-npm install
-cd server
-npm install
-cd ../client
-npm install
-cd ..
-npm run dev
-```
