@@ -47,6 +47,16 @@ const ChatPage = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
+    const displayedMessages = selectedRecipient
+    ? messages.filter((msg) =>
+        msg.chatId === selectedRecipient ||
+        msg.recipientId === selectedRecipient ||
+        msg.senderId === selectedRecipient ||
+        msg.recipient === selectedRecipient ||
+        msg.sender === selectedRecipient
+        )
+    : [];
+
 	const { data: groupData, refetch: refetchGroups } = useGetGroupsQuery();
 	const [createGroup] = useCreateGroupMutation();
 	const [sendMessageToGroup] = useSendMessageToGroupMutation();
@@ -76,12 +86,7 @@ const ChatPage = () => {
 	}, [messageData]);
 
 	useEffect(() => {
-		let newSocket;
-		if (process.env.NODE_ENV === "production") {
-			newSocket = io("https://gamer-chat-161acd6cf748.herokuapp.com/");
-		} else {
-			newSocket = io("http://localhost:4000");
-		}
+		const newSocket = io("http://localhost:4000");
 		setSocket(newSocket);
 
 		if (userInfo) {
@@ -280,23 +285,6 @@ const ChatPage = () => {
 	const handleChange = (e) => {
 		setMessage(e.target.value);
 	};
-
-	// const handleSelectedRecipientChange = (e) => {
-	// 	const value = e.target.value;
-	// 	if (value === "new-recipient") {
-	// 		setShowNewRecipientModal(true);
-	// 	} else if (value === "new-group") {
-	// 		setShowNewGroupModal(true);
-	// 	} else {
-	// 		setSelectedRecipient(value);
-
-	// 		// Join the group if it's a group chat
-	// 		const isGroupChat = groups.some((g) => g._id === value);
-	// 		if (isGroupChat) {
-	// 			socket.emit("join-group", value);
-	// 		}
-	// 	}
-	// };
 
 	const handleNewChatGroupChange = (e) => {
 		const value = e.target.value;
@@ -500,7 +488,7 @@ const ChatPage = () => {
 			)}
 			<div className="main-content">
 				<ListGroup id="messages" className="messages">
-					{messages.map((msg, index) => (
+					{displayedMessages.map((msg, index) => (
 						<ListGroup.Item
 							key={index}
 							className={`message-container ${
