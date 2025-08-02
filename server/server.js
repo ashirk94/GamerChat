@@ -23,7 +23,7 @@ app.use(
 	cors({
 		origin: [
 			"http://localhost:3000",
-			"https://gamer-chat-161acd6cf748.herokuapp.com/"
+            "http://localhost:5173",
 		],
 		credentials: true
 	})
@@ -53,7 +53,7 @@ const io = new SocketIoServer(server, {
 	cors: {
 		origin: [
 			"http://localhost:3000",
-			"https://gamer-chat-161acd6cf748.herokuapp.com/"
+            "http://localhost:5173",
 		],
 		methods: ["GET", "POST"]
 	}

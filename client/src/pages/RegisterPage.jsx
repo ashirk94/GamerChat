@@ -85,7 +85,7 @@ function RegisterPage() {
 								setPassword(e.target.value)
 							}></Form.Control>
 					</Form.Group>
-					<Form.Group className="my-2" controlId="password">
+					<Form.Group className="my-2" controlId="confirmPassword">
 						<Form.Label>Confirm Password</Form.Label>
 						<Form.Control
 							type="password"
