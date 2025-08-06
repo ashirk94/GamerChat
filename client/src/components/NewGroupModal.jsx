@@ -5,7 +5,8 @@ const NewGroupModal = ({
     show, 
     onHide, 
     onSubmit, 
-    allUsers = [] 
+    allUsers = [],
+    userInfo
 }) => {
     const [newGroup, setNewGroup] = useState("");
     const [newGroupUsers, setNewGroupUsers] = useState([]);
@@ -58,7 +59,9 @@ const NewGroupModal = ({
                         <Form.Label>Select Users</Form.Label>
                         <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                             <ListGroup>
-                                {allUsers.map((user) => (
+                                {allUsers
+                                    .filter(user => user.displayName !== userInfo?.displayName)
+                                    .map((user) => (
                                     <ListGroup.Item key={user._id}>
                                         <Form.Check
                                             type="checkbox"

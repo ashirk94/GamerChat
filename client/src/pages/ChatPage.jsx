@@ -288,9 +288,19 @@ const ChatPage = () => {
                 name: groupName,
                 userIds: groupUsers.map((user) => user._id)
             }).unwrap();
+            
+            // Add the new group to the groups list
             setGroups((prevGroups) => [...prevGroups, group]);
+            
+            // Select the newly created group
+            setSelectedRecipient(group._id);
+            setChatType("group");
+            
+            // Clear any previous error
+            setError(null);
         } catch (error) {
             console.error("Error creating group:", error);
+            setError("Error creating group. Please try again.");
         }
     };
 
@@ -430,6 +440,7 @@ const ChatPage = () => {
                 onHide={() => setShowNewRecipientModal(false)}
                 onSubmit={handleNewRecipientSubmit}
                 allUsers={allUsers}
+                userInfo={userInfo}
             />
 
             <NewGroupModal
@@ -437,6 +448,7 @@ const ChatPage = () => {
                 onHide={() => setShowNewGroupModal(false)}
                 onSubmit={handleNewGroupSubmit}
                 allUsers={allUsers}
+                userInfo={userInfo}
             />
         </Container>
     );

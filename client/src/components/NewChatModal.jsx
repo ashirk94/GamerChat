@@ -5,7 +5,8 @@ const NewChatModal = ({
     show, 
     onHide, 
     onSubmit, 
-    allUsers = [] 
+    allUsers = [],
+    userInfo
 }) => {
     const [newRecipient, setNewRecipient] = useState("");
     const [error, setError] = useState("");
@@ -14,7 +15,7 @@ const NewChatModal = ({
         e.preventDefault();
         
         // Prevent starting a chat with yourself
-        if (newRecipient === currentUserDisplayName) {
+        if (userInfo && newRecipient.trim() === userInfo.displayName) {
             setError("You cannot start a chat with yourself.");
             return;
         }
