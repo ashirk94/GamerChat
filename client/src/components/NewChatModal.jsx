@@ -13,6 +13,11 @@ const NewChatModal = ({
     const handleSubmit = (e) => {
         e.preventDefault();
         
+        // Prevent starting a chat with yourself
+        if (newRecipient === currentUserDisplayName) {
+            setError("You cannot start a chat with yourself.");
+            return;
+        }
         // Validate that the username exists
         const userExists = allUsers.some(user => 
             user.displayName === newRecipient
