@@ -18,7 +18,7 @@ export const useSocket = (userInfo, selectedRecipient, onMessage, onGroupMessage
         return () => {
             newSocket.disconnect();
         };
-    }, [userInfo]);
+    }, [userInfo, onMessage, onGroupMessage]);
 
     return socket;
 };
