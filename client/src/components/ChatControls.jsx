@@ -72,7 +72,7 @@ const ChatControls = ({
                     Group Messages
                 </option>
                 {groups
-                    .filter((grp) => grp && grp.name && grp.name.trim() !== "")
+                    .filter((grp) => grp && typeof grp.name === "string" && grp.name.trim() !== "")
                     .map((grp, index) => (
                         <option key={index} value={grp._id}>
                             {grp.name}
