@@ -274,10 +274,12 @@ const ChatPage = () => {
     const handleNewRecipientSubmit = (recipient) => {
         setSelectedRecipient(recipient);
         setChatType("direct");
-        setRecipients((prevRecipients) => [
-            ...prevRecipients.filter((rec) => rec !== recipient),
-            recipient
-        ]);
+        if (recipient) {
+            setRecipients((prevRecipients) => [
+                ...prevRecipients.filter((rec) => rec !== recipient),
+                recipient
+            ]);
+        }
     };
 
     const handleNewGroupSubmit = async (groupName, groupUsers) => {
