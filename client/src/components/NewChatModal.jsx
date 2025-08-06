@@ -15,7 +15,7 @@ const NewChatModal = ({
         
         // Validate that the username exists
         const userExists = allUsers.some(user => 
-            user.displayName.toLowerCase() === newRecipient.toLowerCase()
+            user.displayName === newRecipient
         );
         
         if (!userExists) {
